@@ -1,0 +1,14 @@
+{
+  "name": "jdiamonds",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JO.DIAMONDS luxury jewellery commerce prototype",
+  "scripts": {
+    "dev:frontend": "pnpm --dir frontend dev",
+    "dev:backend": "pnpm --dir backend start:dev",
+    "build": "pnpm --recursive build",
+    "lint": "pnpm --recursive --if-present lint",
+    "test": "pnpm --recursive --if-present test",
+    "typecheck": "pnpm --recursive --if-present typecheck"
+  }
+}

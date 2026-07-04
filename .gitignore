@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Nuxt
+.nuxt/
+.output/
+
+# Nest / TypeScript
+dist/
+
+# Tests
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Local editor and OS files
+.DS_Store
+.idea/
+.vscode/
