@@ -9,6 +9,7 @@ import {
 
 import { AppModule } from './app.module';
 import type { EnvironmentVariables } from './config/environment';
+import { createValidationPipe } from './common/validation/create-validation-pipe';
 
 const MAX_REQUEST_BODY_BYTES = 64 * 1024;
 const REQUEST_TIMEOUT_MS = 10_000;
@@ -20,6 +21,7 @@ async function bootstrap(): Promise<void> {
     bodyLimit: MAX_REQUEST_BODY_BYTES,
     requestTimeout: REQUEST_TIMEOUT_MS,
     handlerTimeout: HANDLER_TIMEOUT_MS,
+
     requestIdHeader: false,
     requestIdLogLabel: 'requestId',
     genReqId: (): string => `req_${randomUUID()}`,
@@ -58,6 +60,7 @@ async function bootstrap(): Promise<void> {
     credentials: false,
     exposedHeaders: [REQUEST_ID_RESPONSE_HEADER],
   });
+  app.useGlobalPipes(createValidationPipe());
 
   await app.listen(port, host);
 
