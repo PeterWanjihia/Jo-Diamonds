@@ -6,6 +6,7 @@ import {
   FastifyAdapter,
   type NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import helmet from '@fastify/helmet';
 
 import { AppModule } from './app.module';
 import type { EnvironmentVariables } from './config/environment';
@@ -42,6 +43,8 @@ async function bootstrap(): Promise<void> {
     },
   );
 
+  await app.register(helmet);
+
   const config =
     app.get<ConfigService<EnvironmentVariables, true>>(ConfigService);
 
@@ -55,7 +58,7 @@ async function bootstrap(): Promise<void> {
   app.setGlobalPrefix(apiPrefix);
 
   app.enableCors({
-    origin: frontendOrigin,
+    origin: [frontendOrigin],
     methods: ['GET', 'HEAD', 'POST', 'OPTIONS'],
     credentials: false,
     exposedHeaders: [REQUEST_ID_RESPONSE_HEADER],
