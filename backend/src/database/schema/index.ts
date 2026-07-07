@@ -1,2 +1,8 @@
-// Drizzle table exports will be added here in Phase 4F.
-export {};
+export * from './enums.schema';
+export * from './products.schema';
+export * from './product-images.schema';
+export * from './orders.schema';
+export * from './order-items.schema';
+export * from './inventory-reservations.schema';
+export * from './stripe-events.schema';
+export * from './enquiries.schema';
