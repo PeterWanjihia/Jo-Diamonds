@@ -8,4 +8,6 @@ export interface EnvironmentVariables {
   API_PREFIX: string;
   FRONTEND_ORIGIN: string;
   LOG_LEVEL: 'debug' | 'info' | 'warn' | 'error';
+  DATABASE_URL: string;
+  TEST_DATABASE_URL?: string;
 }
