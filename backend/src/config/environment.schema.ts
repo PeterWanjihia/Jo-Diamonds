@@ -27,11 +27,9 @@ export const environmentSchema = Joi.object({
 
   FRONTEND_ORIGIN: Joi.when('NODE_ENV', {
     is: Joi.valid('staging', 'production'),
-
     then: Joi.string()
       .uri({ scheme: ['https'] })
       .required(),
-
     otherwise: Joi.string()
       .uri({ scheme: ['http', 'https'] })
       .default('http://localhost:3000'),
