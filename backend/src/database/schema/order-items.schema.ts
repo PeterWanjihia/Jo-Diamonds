@@ -52,8 +52,8 @@ export const orderItems = pgTable(
     ),
     check('order_items_quantity_positive_check', sql`${table.quantity} > 0`),
     check(
-      'order_items_line_total_minor_non_negative_check',
-      sql`${table.lineTotalMinor} >= 0`,
+      'order_items_line_total_minor_matches_unit_price_quantity_check',
+      sql`${table.lineTotalMinor} = ${table.unitPriceMinorSnapshot} * ${table.quantity}`,
     ),
   ],
 );
