@@ -303,12 +303,24 @@ describe('database smoke tests', () => {
           sku,
           slug,
           name: 'Database Smoke Test Product',
+
+          shortDescription: 'Temporary database smoke-test product.',
           description:
             'Temporary product created inside a rollback-only smoke test.',
+
           category: 'smoke-test',
+
           priceMinor: 100,
           currency: 'KES',
+
           status: 'draft',
+
+          supplyMode: 'unique',
+          editionSize: 1,
+          catalogueStatus: 'draft',
+          availability: 'unavailable',
+          photographyType: 'exact',
+
           isFeatured: false,
         });
 

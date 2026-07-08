@@ -31,7 +31,7 @@ export const products = pgTable(
 
     name: text('name').notNull(),
 
-    shortDescription: text('short_description'),
+    shortDescription: text('short_description').notNull(),
     description: text('description').notNull(),
     designStory: text('design_story'),
 
@@ -44,21 +44,21 @@ export const products = pgTable(
     priceMinor: pgBigint('price_minor', { mode: 'number' }).notNull(),
     currency: text('currency').notNull().default('KES'),
 
-    /*
-     * Legacy Phase 4 state.
-     *
-     * Retained temporarily while existing product rows and application code
-     * migrate to catalogueStatus and availability.
-     */
+    // Legacy field retained until application code fully migrates.
     status: productStatusEnum('status').notNull().default('draft'),
 
-    supplyMode: supplyModeEnum('supply_mode'),
+    supplyMode: supplyModeEnum('supply_mode').notNull(),
     editionSize: integer('edition_size'),
 
-    catalogueStatus: catalogueStatusEnum('catalogue_status'),
-    availability: productAvailabilityEnum('availability'),
+    catalogueStatus: catalogueStatusEnum('catalogue_status')
+      .notNull()
+      .default('draft'),
 
-    photographyType: photographyTypeEnum('photography_type'),
+    availability: productAvailabilityEnum('availability')
+      .notNull()
+      .default('unavailable'),
+
+    photographyType: photographyTypeEnum('photography_type').notNull(),
 
     isFeatured: boolean('is_featured').notNull().default(false),
 
@@ -74,11 +74,7 @@ export const products = pgTable(
     uniqueIndex('products_slug_unique').on(table.slug),
     uniqueIndex('products_sku_unique').on(table.sku),
 
-    /*
-     * Legacy index retained until products.status is removed.
-     */
     index('products_status_idx').on(table.status),
-
     index('products_category_idx').on(table.category),
     index('products_is_featured_idx').on(table.isFeatured),
 
@@ -93,5 +89,27 @@ export const products = pgTable(
     ),
 
     check('products_price_minor_positive_check', sql`${table.priceMinor} > 0`),
+
+    check(
+      'products_supply_mode_edition_size_check',
+      sql`
+        (
+          (
+            ${table.supplyMode} = 'unique'
+            AND ${table.editionSize} = 1
+          )
+          OR
+          (
+            ${table.supplyMode} = 'limited'
+            AND ${table.editionSize} > 1
+          )
+          OR
+          (
+            ${table.supplyMode} = 'reproducible'
+            AND ${table.editionSize} IS NULL
+          )
+        )
+      `,
+    ),
   ],
 );
