@@ -24,12 +24,27 @@ export const catalogueFixtures = [
       slug: 'classic-round-solitaire-ring',
       sku: 'JD-RNG-SOL-001',
       name: 'Classic Round Solitaire Ring',
+
+      shortDescription:
+        'A round-cut solitaire ring in a clean six-prong setting.',
       description:
         'A refined round-cut solitaire ring designed around a clean six-prong setting.',
+      designStory: null,
+
       category: 'rings',
+      collectionId: null,
+
       priceMinor: 45_000_000,
       currency: 'KES',
+
       status: 'available',
+
+      supplyMode: 'unique',
+      editionSize: 1,
+      catalogueStatus: 'published',
+      availability: 'available',
+      photographyType: 'exact',
+
       isFeatured: true,
     },
     images: [
@@ -55,12 +70,27 @@ export const catalogueFixtures = [
       slug: 'halo-diamond-stud-earrings',
       sku: 'JD-EAR-HAL-001',
       name: 'Halo Diamond Stud Earrings',
+
+      shortDescription:
+        'Matched diamond stud earrings framed by delicate halos.',
       description:
         'Matched diamond studs surrounded by a delicate halo for additional brilliance.',
+      designStory: null,
+
       category: 'earrings',
+      collectionId: null,
+
       priceMinor: 28_500_000,
       currency: 'KES',
+
       status: 'available',
+
+      supplyMode: 'reproducible',
+      editionSize: null,
+      catalogueStatus: 'published',
+      availability: 'available',
+      photographyType: 'representative',
+
       isFeatured: false,
     },
     images: [
@@ -86,12 +116,27 @@ export const catalogueFixtures = [
       slug: 'emerald-cut-diamond-pendant',
       sku: 'JD-NEC-EMR-001',
       name: 'Emerald-Cut Diamond Pendant',
+
+      shortDescription:
+        'An emerald-cut diamond pendant in a minimal polished setting.',
       description:
         'An emerald-cut centre stone suspended from a minimal polished pendant setting.',
+      designStory: null,
+
       category: 'necklaces',
+      collectionId: null,
+
       priceMinor: 52_000_000,
       currency: 'KES',
+
       status: 'sold',
+
+      supplyMode: 'unique',
+      editionSize: 1,
+      catalogueStatus: 'published',
+      availability: 'exhausted',
+      photographyType: 'exact',
+
       isFeatured: false,
     },
     images: [
@@ -117,12 +162,27 @@ export const catalogueFixtures = [
       slug: 'diamond-tennis-bracelet',
       sku: 'JD-BRC-TEN-001',
       name: 'Diamond Tennis Bracelet',
+
+      shortDescription:
+        'A fluid diamond tennis bracelet with balanced stone spacing.',
       description:
         'A continuous line bracelet intended for balanced stone spacing and fluid movement.',
+      designStory: null,
+
       category: 'bracelets',
+      collectionId: null,
+
       priceMinor: 68_000_000,
       currency: 'KES',
+
       status: 'draft',
+
+      supplyMode: 'limited',
+      editionSize: 25,
+      catalogueStatus: 'draft',
+      availability: 'unavailable',
+      photographyType: 'representative',
+
       isFeatured: false,
     },
     images: [
@@ -148,12 +208,26 @@ export const catalogueFixtures = [
       slug: 'vintage-oval-halo-ring',
       sku: 'JD-RNG-OVL-001',
       name: 'Vintage Oval Halo Ring',
+
+      shortDescription: 'An oval halo ring with vintage-inspired shoulders.',
       description:
         'An oval centre stone framed by a vintage-inspired halo and detailed shoulders.',
+      designStory: null,
+
       category: 'rings',
+      collectionId: null,
+
       priceMinor: 57_500_000,
       currency: 'KES',
+
       status: 'archived',
+
+      supplyMode: 'unique',
+      editionSize: 1,
+      catalogueStatus: 'archived',
+      availability: 'unavailable',
+      photographyType: 'exact',
+
       isFeatured: false,
     },
     images: [

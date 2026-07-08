@@ -65,11 +65,25 @@ async function seedDatabase(): Promise<void> {
               set: {
                 slug: fixture.product.slug,
                 name: fixture.product.name,
+
+                shortDescription: fixture.product.shortDescription,
                 description: fixture.product.description,
+                designStory: fixture.product.designStory,
+
                 category: fixture.product.category,
+                collectionId: fixture.product.collectionId,
+
                 priceMinor: fixture.product.priceMinor,
                 currency: fixture.product.currency,
+
                 status: fixture.product.status,
+
+                supplyMode: fixture.product.supplyMode,
+                editionSize: fixture.product.editionSize,
+                catalogueStatus: fixture.product.catalogueStatus,
+                availability: fixture.product.availability,
+                photographyType: fixture.product.photographyType,
+
                 isFeatured: fixture.product.isFeatured,
                 updatedAt: catalogueSeedTimestamp,
               },
