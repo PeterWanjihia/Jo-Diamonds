@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { environmentSchema } from './config/environment.schema';
+import { DatabaseModule } from './database';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { environmentSchema } from './config/environment.schema';
         allowUnknown: true,
       },
     }),
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

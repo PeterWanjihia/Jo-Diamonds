@@ -43,6 +43,7 @@ async function bootstrap(): Promise<void> {
     },
   );
 
+  app.enableShutdownHooks();
   await app.register(helmet);
 
   const config =
