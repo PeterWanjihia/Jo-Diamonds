@@ -5,7 +5,23 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 
 import { createPostgresClient } from '../database.client';
 import * as schema from '../schema';
-import { productImages, products } from '../schema';
+import {
+  collections,
+  productCertificates,
+  productGemstoneGroups,
+  productImages,
+  productJewelleryDetails,
+  productServices,
+  products,
+} from '../schema';
+import {
+  certificatesBySku,
+  collectionFixtures,
+  gemstoneGroupsBySku,
+  jewelleryDetailsBySku,
+  productCollectionIdBySku,
+  servicesBySku,
+} from './catalogue-relations.fixtures';
 import {
   catalogueFixtures,
   catalogueSeedTimestamp,
@@ -17,8 +33,13 @@ interface CurrentDatabaseRow {
 }
 
 interface SeedResult {
+  collections: number;
   products: number;
   images: number;
+  jewelleryDetails: number;
+  gemstoneGroups: number;
+  certificates: number;
+  services: number;
 }
 
 async function seedDatabase(): Promise<void> {
@@ -49,14 +70,57 @@ async function seedDatabase(): Promise<void> {
 
     const result = await database.transaction(
       async (transaction): Promise<SeedResult> => {
+        let collectionCount = 0;
         let productCount = 0;
         let imageCount = 0;
+        let jewelleryDetailsCount = 0;
+        let gemstoneGroupCount = 0;
+        let certificateCount = 0;
+        let serviceCount = 0;
+
+        for (const fixture of collectionFixtures) {
+          await transaction
+            .insert(collections)
+            .values({
+              ...fixture,
+              createdAt: catalogueSeedTimestamp,
+              updatedAt: catalogueSeedTimestamp,
+            })
+            .onConflictDoUpdate({
+              target: collections.slug,
+              set: {
+                name: fixture.name,
+                description: fixture.description,
+                updatedAt: catalogueSeedTimestamp,
+              },
+            });
+
+          collectionCount += 1;
+        }
 
         for (const fixture of catalogueFixtures) {
+          const sku = fixture.product.sku;
+          const collectionId = productCollectionIdBySku[sku];
+
+          if (!collectionId) {
+            throw new Error(`No collection assignment found for SKU "${sku}"`);
+          }
+
+          const jewelleryDetails = jewelleryDetailsBySku[sku];
+
+          if (!jewelleryDetails) {
+            throw new Error(`No jewellery details found for SKU "${sku}"`);
+          }
+
+          const gemstoneGroups = gemstoneGroupsBySku[sku] ?? [];
+          const certificates = certificatesBySku[sku] ?? [];
+          const services = servicesBySku[sku] ?? [];
+
           const [seededProduct] = await transaction
             .insert(products)
             .values({
               ...fixture.product,
+              collectionId,
               createdAt: catalogueSeedTimestamp,
               updatedAt: catalogueSeedTimestamp,
             })
@@ -71,7 +135,7 @@ async function seedDatabase(): Promise<void> {
                 designStory: fixture.product.designStory,
 
                 category: fixture.product.category,
-                collectionId: fixture.product.collectionId,
+                collectionId,
 
                 priceMinor: fixture.product.priceMinor,
                 currency: fixture.product.currency,
@@ -93,14 +157,28 @@ async function seedDatabase(): Promise<void> {
             });
 
           if (!seededProduct) {
-            throw new Error(
-              `Product upsert returned no row for SKU "${fixture.product.sku}"`,
-            );
+            throw new Error(`Product upsert returned no row for SKU "${sku}"`);
           }
 
           await transaction
             .delete(productImages)
             .where(eq(productImages.productId, seededProduct.id));
+
+          await transaction
+            .delete(productJewelleryDetails)
+            .where(eq(productJewelleryDetails.productId, seededProduct.id));
+
+          await transaction
+            .delete(productGemstoneGroups)
+            .where(eq(productGemstoneGroups.productId, seededProduct.id));
+
+          await transaction
+            .delete(productCertificates)
+            .where(eq(productCertificates.productId, seededProduct.id));
+
+          await transaction
+            .delete(productServices)
+            .where(eq(productServices.productId, seededProduct.id));
 
           await transaction.insert(productImages).values(
             fixture.images.map((image) => ({
@@ -110,19 +188,71 @@ async function seedDatabase(): Promise<void> {
             })),
           );
 
+          await transaction.insert(productJewelleryDetails).values({
+            ...jewelleryDetails,
+            productId: seededProduct.id,
+          });
+
+          if (gemstoneGroups.length > 0) {
+            await transaction.insert(productGemstoneGroups).values(
+              gemstoneGroups.map((group) => ({
+                ...group,
+                productId: seededProduct.id,
+                createdAt: catalogueSeedTimestamp,
+                updatedAt: catalogueSeedTimestamp,
+              })),
+            );
+          }
+
+          if (certificates.length > 0) {
+            await transaction.insert(productCertificates).values(
+              certificates.map((certificate) => ({
+                ...certificate,
+                productId: seededProduct.id,
+                createdAt: catalogueSeedTimestamp,
+                updatedAt: catalogueSeedTimestamp,
+              })),
+            );
+          }
+
+          if (services.length > 0) {
+            await transaction.insert(productServices).values(
+              services.map((service) => ({
+                ...service,
+                productId: seededProduct.id,
+                createdAt: catalogueSeedTimestamp,
+                updatedAt: catalogueSeedTimestamp,
+              })),
+            );
+          }
+
           productCount += 1;
           imageCount += fixture.images.length;
+          jewelleryDetailsCount += 1;
+          gemstoneGroupCount += gemstoneGroups.length;
+          certificateCount += certificates.length;
+          serviceCount += services.length;
         }
 
         return {
+          collections: collectionCount,
           products: productCount,
           images: imageCount,
+          jewelleryDetails: jewelleryDetailsCount,
+          gemstoneGroups: gemstoneGroupCount,
+          certificates: certificateCount,
+          services: serviceCount,
         };
       },
     );
 
+    console.log(`Seeded ${result.collections} collections.`);
     console.log(`Seeded ${result.products} products.`);
     console.log(`Seeded ${result.images} product images.`);
+    console.log(`Seeded ${result.jewelleryDetails} jewellery detail records.`);
+    console.log(`Seeded ${result.gemstoneGroups} gemstone groups.`);
+    console.log(`Seeded ${result.certificates} certificates.`);
+    console.log(`Seeded ${result.services} product services.`);
     console.log('Database seed completed successfully.');
   } finally {
     await client.end({
