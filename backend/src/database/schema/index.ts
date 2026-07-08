@@ -1,4 +1,5 @@
 export * from './enums.schema';
+export * from './collections.schema';
 export * from './products.schema';
 export * from './product-images.schema';
 export * from './orders.schema';

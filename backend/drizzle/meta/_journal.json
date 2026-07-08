@@ -15,6 +15,13 @@
       "when": 1783498561137,
       "tag": "0001_wild_human_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783500310007,
+      "tag": "0002_shocking_revanche",
+      "breakpoints": true
     }
   ]
 }
