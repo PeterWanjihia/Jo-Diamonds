@@ -2,7 +2,7 @@ import type { productImages, products } from '../schema';
 
 type SeedProduct = Omit<
   typeof products.$inferInsert,
-  'createdAt' | 'updatedAt'
+  'createdAt' | 'updatedAt' | 'status'
 >;
 
 type SeedProductImage = Omit<
@@ -36,8 +36,6 @@ export const catalogueFixtures = [
 
       priceMinor: 45_000_000,
       currency: 'KES',
-
-      status: 'available',
 
       supplyMode: 'unique',
       editionSize: 1,
@@ -83,8 +81,6 @@ export const catalogueFixtures = [
       priceMinor: 28_500_000,
       currency: 'KES',
 
-      status: 'available',
-
       supplyMode: 'reproducible',
       editionSize: null,
       catalogueStatus: 'published',
@@ -128,8 +124,6 @@ export const catalogueFixtures = [
 
       priceMinor: 52_000_000,
       currency: 'KES',
-
-      status: 'sold',
 
       supplyMode: 'unique',
       editionSize: 1,
@@ -175,8 +169,6 @@ export const catalogueFixtures = [
       priceMinor: 68_000_000,
       currency: 'KES',
 
-      status: 'draft',
-
       supplyMode: 'limited',
       editionSize: 25,
       catalogueStatus: 'draft',
@@ -219,8 +211,6 @@ export const catalogueFixtures = [
 
       priceMinor: 57_500_000,
       currency: 'KES',
-
-      status: 'archived',
 
       supplyMode: 'unique',
       editionSize: 1,

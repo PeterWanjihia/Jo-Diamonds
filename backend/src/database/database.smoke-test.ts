@@ -272,8 +272,6 @@ function createSmokeProduct(productId: string): SeedProductInsert {
     priceMinor: 100,
     currency: 'KES',
 
-    status: 'draft',
-
     supplyMode: 'unique',
     editionSize: 1,
 

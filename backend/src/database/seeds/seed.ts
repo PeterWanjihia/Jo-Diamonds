@@ -140,8 +140,6 @@ async function seedDatabase(): Promise<void> {
                 priceMinor: fixture.product.priceMinor,
                 currency: fixture.product.currency,
 
-                status: fixture.product.status,
-
                 supplyMode: fixture.product.supplyMode,
                 editionSize: fixture.product.editionSize,
                 catalogueStatus: fixture.product.catalogueStatus,
