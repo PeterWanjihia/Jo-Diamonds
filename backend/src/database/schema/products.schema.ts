@@ -17,7 +17,6 @@ import {
   catalogueStatusEnum,
   photographyTypeEnum,
   productAvailabilityEnum,
-  productStatusEnum,
   supplyModeEnum,
 } from './enums.schema';
 
@@ -43,9 +42,6 @@ export const products = pgTable(
 
     priceMinor: pgBigint('price_minor', { mode: 'number' }).notNull(),
     currency: text('currency').notNull().default('KES'),
-
-    // Legacy field retained until application code fully migrates.
-    status: productStatusEnum('status').notNull().default('draft'),
 
     supplyMode: supplyModeEnum('supply_mode').notNull(),
     editionSize: integer('edition_size'),
@@ -74,7 +70,6 @@ export const products = pgTable(
     uniqueIndex('products_slug_unique').on(table.slug),
     uniqueIndex('products_sku_unique').on(table.sku),
 
-    index('products_status_idx').on(table.status),
     index('products_category_idx').on(table.category),
     index('products_is_featured_idx').on(table.isFeatured),
 

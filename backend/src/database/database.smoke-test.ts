@@ -171,23 +171,6 @@ const EXPECTED_ENUM_ROWS = [
   },
 
   {
-    enumName: 'product_status',
-    enumValue: 'draft',
-  },
-  {
-    enumName: 'product_status',
-    enumValue: 'available',
-  },
-  {
-    enumName: 'product_status',
-    enumValue: 'sold',
-  },
-  {
-    enumName: 'product_status',
-    enumValue: 'archived',
-  },
-
-  {
     enumName: 'reservation_status',
     enumValue: 'active',
   },
