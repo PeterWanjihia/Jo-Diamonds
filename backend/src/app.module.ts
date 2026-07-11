@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CatalogueModule } from './catalogue';
 import { environmentSchema } from './config/environment.schema';
 import { DatabaseModule } from './database';
 
@@ -19,6 +20,7 @@ import { DatabaseModule } from './database';
       },
     }),
     DatabaseModule,
+    CatalogueModule,
   ],
   controllers: [AppController],
   providers: [AppService],
