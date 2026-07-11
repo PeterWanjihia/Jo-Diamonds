@@ -155,7 +155,7 @@ export type CatalogueServicePricing =
       readonly price: null;
     };
 
-export interface CatalogueService {
+export interface CatalogueProductService {
   readonly id: string;
 
   readonly serviceType: ProductServiceType;
@@ -241,5 +241,5 @@ export interface CatalogueProductAggregate {
 
   readonly certificates: readonly CatalogueCertificate[];
 
-  readonly services: readonly CatalogueService[];
+  readonly services: readonly CatalogueProductService[];
 }
