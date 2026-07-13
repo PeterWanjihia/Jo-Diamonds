@@ -33,10 +33,8 @@
     serif;
 
   --font-interface:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
+    'Inter',
+    Arial,
     sans-serif;
 
   --font-size-caption: 0.75rem;

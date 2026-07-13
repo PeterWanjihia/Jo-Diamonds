@@ -1,215 +1,226 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
+import BaseTextLink from '../base/BaseTextLink.vue';
+import CollectionEditorialCard
+  from './CollectionEditorialCard.vue';
+
+import {
+  showroomCollectionEditorial,
+  showroomCollectionOrder,
+  type ShowroomCollectionEditorial,
+} from '../../config/showroom-editorial';
+
 import type {
   CatalogueCollectionResponse,
 } from '../../types/catalogue';
 
-defineProps<{
+interface ShowroomCollectionCard {
+  readonly collection: CatalogueCollectionResponse;
+  readonly editorial: ShowroomCollectionEditorial;
+}
+
+const props = defineProps<{
   readonly collections:
     readonly CatalogueCollectionResponse[];
 }>();
+
+const cards = computed<
+  readonly ShowroomCollectionCard[]
+>(() => {
+  const collectionsBySlug = new Map(
+    props.collections.map(
+      (collection) => [
+        collection.slug,
+        collection,
+      ],
+    ),
+  );
+
+  return showroomCollectionOrder.flatMap(
+    (slug) => {
+      const collection =
+        collectionsBySlug.get(slug);
+
+      if (!collection) {
+        return [];
+      }
+
+      return [
+        {
+          collection,
+          editorial:
+            showroomCollectionEditorial[slug],
+        },
+      ];
+    },
+  );
+});
 </script>
 
 <template>
   <section
     id="collections"
-    class="collections"
+    class="collection-showcase"
+    aria-labelledby="collection-showcase-title"
   >
-    <div class="page-container">
-      <div class="collections__heading">
-        <div>
-          <p class="collections__eyebrow">
-            The collections
-          </p>
-
-          <h2 class="collections__title">
-            Signatures of the house
-          </h2>
-        </div>
-
-        <p class="collections__introduction">
-          Distinct expressions united by proportion,
-          restraint and enduring presence.
-        </p>
-      </div>
-
-      <div class="collections__grid">
-        <article
-          v-for="(collection, index) in collections"
-          :key="collection.slug"
-          class="collection-card"
+    <div class="collection-showcase__inner">
+      <header class="collection-showcase__header">
+        <h2
+          id="collection-showcase-title"
+          class="collection-showcase__title"
         >
-          <div
-            class="collection-card__visual"
-            :data-position="index + 1"
-          >
-            <span aria-hidden="true">
-              {{ String(index + 1).padStart(2, '0') }}
-            </span>
-          </div>
+          Our signature collections
+        </h2>
 
-          <div class="collection-card__content">
-            <p class="collection-card__label">
-              Collection
-            </p>
+        <BaseTextLink
+          to="/collection"
+          tone="light"
+          arrow="right"
+          class="collection-showcase__all-link"
+        >
+          Explore all collections
+        </BaseTextLink>
+      </header>
 
-            <h3 class="collection-card__title">
-              {{ collection.name }}
-            </h3>
-
-            <p
-              v-if="collection.description"
-              class="collection-card__description"
-            >
-              {{ collection.description }}
-            </p>
-          </div>
-        </article>
+      <div
+        v-if="cards.length > 0"
+        class="collection-showcase__grid"
+      >
+        <CollectionEditorialCard
+          v-for="card in cards"
+          :key="card.collection.slug"
+          :collection="card.collection"
+          :editorial="card.editorial"
+        />
       </div>
+
+      <p
+        v-else
+        class="collection-showcase__empty"
+      >
+        The signature collections are currently
+        being prepared.
+      </p>
     </div>
   </section>
 </template>
 
 <style scoped>
-.collections {
+.collection-showcase {
+  scroll-margin-top: 4.5rem;
+
+  background: #f5f1ea;
+  color: #171612;
+}
+
+.collection-showcase__inner {
+  width: min(
+    calc(100% - (2 * var(--page-gutter))),
+    var(--container-wide)
+  );
+
+  margin-inline: auto;
+
   padding-block:
-    clamp(var(--space-8), 10vw, var(--space-10));
-
-  background: var(--colour-ivory);
+    clamp(2rem, 3vw, 3rem)
+    1.25rem;
 }
 
-.collections__heading {
-  display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(18rem, 0.55fr);
+.collection-showcase__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  align-items: end;
-  gap: var(--space-8);
+  gap: 2rem;
+
+  margin-bottom: 1.25rem;
 }
 
-.collections__eyebrow,
-.collection-card__label {
-  color: var(--colour-gold);
+.collection-showcase__title {
+  margin: 0;
 
-  font-size: var(--font-size-label);
+  font-family: var(--font-interface);
+  font-size: 0.6875rem;
   font-weight: 600;
 
-  letter-spacing: var(--letter-spacing-label);
+  line-height: 1;
+  letter-spacing: 0.09em;
+
   text-transform: uppercase;
 }
 
-.collections__title {
-  max-width: 12ch;
-  margin-top: var(--space-4);
+.collection-showcase__all-link {
+  min-height: 2rem;
 
-  font-family: var(--font-display);
-  font-size: var(--font-size-heading-medium);
-  font-weight: 400;
+  border-bottom: 0;
 
-  line-height: var(--line-height-tight);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
 }
 
-.collections__introduction,
-.collection-card__description {
-  color: var(--colour-text-muted);
+.collection-showcase__all-link:hover {
+  border-bottom: 0;
 }
 
-.collections__grid {
+.collection-showcase__grid {
   display: grid;
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: var(--space-5);
-
-  margin-top: var(--space-8);
+  gap: clamp(
+    1rem,
+    1.8vw,
+    1.5rem
+  );
 }
 
-.collection-card {
-  background: var(--colour-paper);
-}
+.collection-showcase__empty {
+  padding-block: 5rem;
 
-.collection-card__visual {
-  display: grid;
-  min-height: 22rem;
-  place-items: end start;
+  color: rgb(23 22 18 / 64%);
 
-  padding: var(--space-5);
-
-  background:
-    radial-gradient(
-      circle at 70% 30%,
-      rgb(255 255 255 / 14%),
-      transparent 30%
-    ),
-    linear-gradient(
-      145deg,
-      var(--colour-ink-soft),
-      var(--colour-ink)
-    );
-
-  color: var(--colour-gold-soft);
-
-  font-family: var(--font-display);
-  font-size: 3.5rem;
-}
-
-.collection-card__visual[data-position='2'] {
-  background:
-    radial-gradient(
-      circle at 35% 25%,
-      #fff,
-      transparent 30%
-    ),
-    linear-gradient(
-      145deg,
-      #e8e0d5,
-      #c8b9a5
-    );
-
-  color: var(--colour-text);
-}
-
-.collection-card__content {
-  padding: var(--space-6);
-}
-
-.collection-card__title {
-  margin-top: var(--space-3);
-
-  font-family: var(--font-display);
-  font-size: var(--font-size-heading-small);
-  font-weight: 400;
-
-  line-height: var(--line-height-heading);
-}
-
-.collection-card__description {
-  margin-top: var(--space-4);
+  text-align: center;
 }
 
 @media (max-width: 900px) {
-  .collections__heading {
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
-  }
-
-  .collections__grid {
+  .collection-showcase__grid {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
   }
 
-  .collection-card:last-child {
-    grid-column: 1 / -1;
+
+  .collection-showcase__grid
+    :deep(.collection-card:last-child) {
+      grid-column: 1 / -1;
   }
 }
 
-@media (max-width: 620px) {
-  .collections__grid {
-    grid-template-columns: 1fr;
+@media (max-width: 700px) {
+  .collection-showcase {
+    scroll-margin-top: 4rem;
   }
 
-  .collection-card:last-child {
-    grid-column: auto;
+  .collection-showcase__inner {
+    width: calc(100% - 2rem);
+
+    padding-block:
+      2rem
+      2.75rem;
+  }
+
+  .collection-showcase__header {
+    align-items: flex-start;
+  }
+
+  .collection-showcase__all-link {
+    display: none;
+  }
+
+  .collection-showcase__grid {
+    grid-template-columns: 1fr;
+
+    gap: 1rem;
   }
 }
 </style>

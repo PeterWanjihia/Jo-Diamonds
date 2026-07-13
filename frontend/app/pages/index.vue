@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import BrandManifesto from '../components/showroom/BrandManifesto.vue';
 import CollectionShowcase from '../components/showroom/CollectionShowcase.vue';
 import FeaturedMasterpiece from '../components/showroom/FeaturedMasterpiece.vue';
+import HouseStandards from '../components/showroom/HouseStandards.vue';
+import PrivateAssistance from '../components/showroom/PrivateAssistance.vue';
+import PrivateListSignup from '../components/showroom/PrivateListSignup.vue';
+import ShowroomHero from '../components/showroom/ShowroomHero.vue';
 
 import { useShowroomData } from '../composables/use-showroom-data';
 
@@ -29,32 +34,11 @@ useSeoMeta({
 
 <template>
   <main>
-    <section class="showroom-foundation">
-      <div class="page-container showroom-foundation__content">
-        <p class="showroom-foundation__eyebrow">
-          The House of JO.DIAMONDS
-        </p>
+    <ShowroomHero />
 
-        <h1 class="showroom-foundation__title">
-          Objects of permanence.
-        </h1>
+    <BrandManifesto />
 
-        <p class="showroom-foundation__description">
-          Exceptional jewellery selected for character,
-          craftsmanship and lasting presence.
-        </p>
-
-        <a
-          class="showroom-foundation__action"
-          href="#collections"
-        >
-          Explore the collections
-
-          <span aria-hidden="true">↓</span>
-        </a>
-      </div>
-    </section>
-
+    <!-- Catalogue loading state -->
     <section
       v-if="isPending"
       class="catalogue-status"
@@ -71,6 +55,7 @@ useSeoMeta({
       </div>
     </section>
 
+    <!-- Catalogue error state -->
     <section
       v-else-if="error"
       class="catalogue-status"
@@ -100,6 +85,7 @@ useSeoMeta({
       </div>
     </section>
 
+    <!-- Successful catalogue state -->
     <template v-else>
       <CollectionShowcase
         :collections="collections"
@@ -129,92 +115,35 @@ useSeoMeta({
         </div>
       </section>
     </template>
+
+    <!-- Static Showroom sections -->
+    <HouseStandards />
+
+    <PrivateAssistance />
+
+    <PrivateListSignup />
   </main>
 </template>
 
 <style scoped>
-.showroom-foundation {
-  display: grid;
-  min-height: 100svh;
-  align-items: center;
-
-  background:
-    radial-gradient(
-      circle at 72% 35%,
-      rgb(255 255 255 / 12%),
-      transparent 28%
-    ),
-    linear-gradient(
-      135deg,
-      #171715 0%,
-      #0d0d0c 60%,
-      #050505 100%
-    );
-
-  color: var(--colour-text-on-dark);
-}
-
-.showroom-foundation__content {
-  padding-block: var(--space-9);
-}
-
-.showroom-foundation__eyebrow,
-.catalogue-status__eyebrow {
-  margin-bottom: var(--space-5);
-
-  color: var(--colour-gold-soft);
-
-  font-size: var(--font-size-label);
-  font-weight: 600;
-
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-}
-
-.showroom-foundation__title {
-  max-width: 11ch;
-
-  font-family: var(--font-display);
-  font-size: var(--font-size-heading-large);
-  font-weight: 400;
-
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-display);
-  text-transform: uppercase;
-}
-
-.showroom-foundation__description {
-  max-width: 34rem;
-  margin-top: var(--space-6);
-
-  color: rgb(247 243 237 / 78%);
-
-  font-size: var(--font-size-body-large);
-}
-
-.showroom-foundation__action {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-4);
-
-  margin-top: var(--space-7);
-  padding-bottom: var(--space-2);
-
-  border-bottom:
-    1px solid rgb(247 243 237 / 60%);
-
-  font-size: var(--font-size-label);
-  font-weight: 600;
-
-  letter-spacing: var(--letter-spacing-label);
-  text-transform: uppercase;
-}
-
 .catalogue-status {
   min-height: 28rem;
+
   padding-block: var(--space-9);
 
   background: var(--colour-ivory);
+}
+
+.catalogue-status__eyebrow {
+  margin-bottom: var(--space-5);
+
+  color: var(--colour-gold);
+
+  font-size: var(--font-size-label);
+  font-weight: 600;
+
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
 }
 
 .catalogue-status__title {
@@ -229,6 +158,7 @@ useSeoMeta({
 
 .catalogue-status__message {
   max-width: 34rem;
+
   margin-top: var(--space-5);
 
   color: var(--colour-text-muted);
@@ -236,6 +166,7 @@ useSeoMeta({
 
 .catalogue-status__retry {
   margin-top: var(--space-6);
+
   padding:
     var(--space-4)
     var(--space-6);
