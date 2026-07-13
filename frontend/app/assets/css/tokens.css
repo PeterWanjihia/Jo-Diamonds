@@ -1,0 +1,111 @@
+:root {
+  /*
+   * Brand colours
+   */
+
+  --colour-ink: #0d0d0c;
+  --colour-ink-soft: #181715;
+
+  --colour-ivory: #f7f3ed;
+  --colour-paper: #fcfaf6;
+  --colour-surface: #f1ece5;
+
+  --colour-text: #171612;
+  --colour-text-muted: #6e6961;
+  --colour-text-on-dark: #f7f3ed;
+
+  --colour-gold: #a78547;
+  --colour-gold-soft: #c4aa78;
+
+  --colour-border: #d8d1c8;
+  --colour-border-dark: #373531;
+
+  --colour-success: #32643c;
+  --colour-danger: #823e35;
+
+  /*
+   * Typography
+   */
+
+  --font-display:
+    'Cormorant Garamond',
+    'Times New Roman',
+    serif;
+
+  --font-interface:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+
+  --font-size-caption: 0.75rem;
+  --font-size-label: 0.8125rem;
+  --font-size-body-small: 0.875rem;
+  --font-size-body: 1rem;
+  --font-size-body-large: 1.125rem;
+
+  --font-size-heading-small: clamp(1.5rem, 2vw, 2rem);
+  --font-size-heading-medium: clamp(2rem, 3.5vw, 3.5rem);
+  --font-size-heading-large: clamp(3rem, 6vw, 6rem);
+
+  --line-height-tight: 1.05;
+  --line-height-heading: 1.15;
+  --line-height-body: 1.65;
+
+  --letter-spacing-label: 0.09em;
+  --letter-spacing-display: 0.015em;
+
+  /*
+   * Spacing
+   */
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  /*
+   * Layout
+   */
+
+  --container-reading: 47.5rem;
+  --container-default: 77.5rem;
+  --container-wide: 90rem;
+
+  --page-gutter: clamp(1.25rem, 4vw, 4rem);
+
+  /*
+   * Structure
+   */
+
+  --border-thin: 1px solid var(--colour-border);
+  --border-dark: 1px solid var(--colour-border-dark);
+
+  --radius-small: 2px;
+  --radius-panel: 4px;
+
+  /*
+   * Motion
+   */
+
+  --duration-fast: 150ms;
+  --duration-normal: 260ms;
+  --duration-slow: 500ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /*
+   * Layering
+   */
+
+  --z-header: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+}

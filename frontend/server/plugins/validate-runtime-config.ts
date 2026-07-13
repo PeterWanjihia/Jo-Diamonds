@@ -5,11 +5,25 @@ const validEnvironments = new Set([
   'production',
 ]);
 
+function parseAbsoluteUrl(
+  value: string,
+  variableName: string,
+): URL {
+  try {
+    return new URL(value);
+  } catch {
+    throw new Error(
+      `${variableName} must be a valid absolute URL: "${value}"`,
+    );
+  }
+}
+
 export default defineNitroPlugin(() => {
   const config = useRuntimeConfig();
 
   const environment = config.public.appEnvironment;
   const apiBaseUrl = config.public.apiBaseUrl;
+  const siteUrl = config.public.siteUrl;
 
   if (!validEnvironments.has(environment)) {
     throw new Error(
@@ -17,15 +31,15 @@ export default defineNitroPlugin(() => {
     );
   }
 
-  let parsedApiUrl: URL;
+  const parsedApiUrl = parseAbsoluteUrl(
+    apiBaseUrl,
+    'NUXT_PUBLIC_API_BASE_URL',
+  );
 
-  try {
-    parsedApiUrl = new URL(apiBaseUrl);
-  } catch {
-    throw new Error(
-      `NUXT_PUBLIC_API_BASE_URL must be a valid absolute URL: "${apiBaseUrl}"`,
-    );
-  }
+  const parsedSiteUrl = parseAbsoluteUrl(
+    siteUrl,
+    'NUXT_PUBLIC_SITE_URL',
+  );
 
   if (
     ['staging', 'production'].includes(environment) &&
@@ -33,6 +47,15 @@ export default defineNitroPlugin(() => {
   ) {
     throw new Error(
       'Staging and production API URLs must use HTTPS.',
+    );
+  }
+
+  if (
+    ['staging', 'production'].includes(environment) &&
+    parsedSiteUrl.protocol !== 'https:'
+  ) {
+    throw new Error(
+      'Staging and production site URLs must use HTTPS.',
     );
   }
 });
