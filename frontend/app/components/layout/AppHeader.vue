@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  computed,
   onBeforeUnmount,
   ref,
   watch,
@@ -8,6 +9,23 @@ import {
 const route = useRoute();
 
 const isMenuOpen = ref(false);
+
+const isCollectionRoute = computed(
+  () => route.path.startsWith('/collection'),
+);
+
+const collectionUrl = '/collection/';
+const craftUrl = '/collection/#craft';
+const privateViewingUrl =
+  '/collection/#private-experience';
+
+const conciergeEmail =
+  'concierge@jodiamonds.store';
+
+const conciergeUrl =
+  `mailto:${conciergeEmail}?subject=${encodeURIComponent(
+    'Private client assistance',
+  )}`;
 
 function closeMenu(): void {
   isMenuOpen.value = false;
@@ -45,7 +63,7 @@ onBeforeUnmount(() => {
 <template>
   <header class="site-header">
     <div class="site-header__inner">
-      <!-- Mobile menu control -->
+      <!-- Mobile menu button -->
       <button
         class="site-header__menu-button"
         type="button"
@@ -81,29 +99,41 @@ onBeforeUnmount(() => {
 
       <!-- Desktop left navigation -->
       <nav
-        class="site-header__navigation site-header__navigation--left"
+        class="
+          site-header__navigation
+          site-header__navigation--left
+        "
         aria-label="Primary navigation"
       >
-        <a
+        <NuxtLink
           class="site-header__navigation-link"
-          href="#collections"
+          :class="{
+            'site-header__navigation-link--active':
+              isCollectionRoute,
+          }"
+          :to="collectionUrl"
+          :aria-current="
+            isCollectionRoute
+              ? 'page'
+              : undefined
+          "
         >
-          Collections
-        </a>
+          The Collection
+        </NuxtLink>
 
-        <a
+        <NuxtLink
           class="site-header__navigation-link"
-          href="#craft"
+          :to="craftUrl"
         >
-          Our craft
-        </a>
+          Our Craft
+        </NuxtLink>
 
-        <a
+        <NuxtLink
           class="site-header__navigation-link"
-          href="#private-assistance"
+          :to="privateViewingUrl"
         >
-          Private viewing
-        </a>
+          Private Viewing
+        </NuxtLink>
       </nav>
 
       <!-- Centred wordmark -->
@@ -117,7 +147,10 @@ onBeforeUnmount(() => {
 
       <!-- Desktop right navigation -->
       <nav
-        class="site-header__navigation site-header__navigation--right"
+        class="
+          site-header__navigation
+          site-header__navigation--right
+        "
         aria-label="Customer navigation"
       >
         <button
@@ -159,7 +192,11 @@ onBeforeUnmount(() => {
             />
 
             <path
-              d="M5.5 20c.6-4 3-6 6.5-6s5.9 2 6.5 6"
+              d="
+                M5.5 20
+                c.6-4 3-6 6.5-6
+                s5.9 2 6.5 6
+              "
             />
           </svg>
 
@@ -179,7 +216,12 @@ onBeforeUnmount(() => {
             <path d="M5 8.5h14l1 12H4z" />
 
             <path
-              d="M8.5 9V6.5a3.5 3.5 0 0 1 7 0V9"
+              d="
+                M8.5 9
+                V6.5
+                a3.5 3.5 0 0 1 7 0
+                V9
+              "
             />
           </svg>
 
@@ -187,7 +229,7 @@ onBeforeUnmount(() => {
         </button>
       </nav>
 
-      <!-- Mobile bag control -->
+      <!-- Mobile bag button -->
       <button
         class="site-header__mobile-bag"
         type="button"
@@ -201,7 +243,12 @@ onBeforeUnmount(() => {
           <path d="M5 8.5h14l1 12H4z" />
 
           <path
-            d="M8.5 9V6.5a3.5 3.5 0 0 1 7 0V9"
+            d="
+              M8.5 9
+              V6.5
+              a3.5 3.5 0 0 1 7 0
+              V9
+            "
           />
         </svg>
 
@@ -209,7 +256,7 @@ onBeforeUnmount(() => {
       </button>
     </div>
 
-    <!-- Mobile navigation panel -->
+    <!-- Mobile navigation drawer -->
     <Transition name="mobile-navigation">
       <div
         v-if="isMenuOpen"
@@ -221,26 +268,26 @@ onBeforeUnmount(() => {
           aria-label="Mobile navigation"
         >
           <div class="mobile-navigation__primary">
-            <a
-              href="#collections"
+            <NuxtLink
+              :to="collectionUrl"
               @click="closeMenu"
             >
               The Collection
-            </a>
+            </NuxtLink>
 
-            <a
-              href="#craft"
+            <NuxtLink
+              :to="craftUrl"
               @click="closeMenu"
             >
               Our Craft
-            </a>
+            </NuxtLink>
 
-            <a
-              href="#private-assistance"
+            <NuxtLink
+              :to="privateViewingUrl"
               @click="closeMenu"
             >
               Private Viewing
-            </a>
+            </NuxtLink>
           </div>
 
           <div class="mobile-navigation__actions">
@@ -275,7 +322,11 @@ onBeforeUnmount(() => {
                 />
 
                 <path
-                  d="M5.5 20c.6-4 3-6 6.5-6s5.9 2 6.5 6"
+                  d="
+                    M5.5 20
+                    c.6-4 3-6 6.5-6
+                    s5.9 2 6.5 6
+                  "
                 />
               </svg>
 
@@ -288,10 +339,17 @@ onBeforeUnmount(() => {
                 fill="none"
                 aria-hidden="true"
               >
-                <path d="M5 8.5h14l1 12H4z" />
+                <path
+                  d="M5 8.5h14l1 12H4z"
+                />
 
                 <path
-                  d="M8.5 9V6.5a3.5 3.5 0 0 1 7 0V9"
+                  d="
+                    M8.5 9
+                    V6.5
+                    a3.5 3.5 0 0 1 7 0
+                    V9
+                  "
                 />
               </svg>
 
@@ -300,11 +358,16 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="mobile-navigation__concierge">
-            <p>Private client assistance</p>
+            <p>
+              Private client assistance
+            </p>
 
-            <a href="mailto:concierge@jodiamonds.store">
+            <a :href="conciergeUrl">
               Contact the concierge
-              <span aria-hidden="true">→</span>
+
+              <span aria-hidden="true">
+                →
+              </span>
             </a>
           </div>
         </nav>
@@ -361,6 +424,7 @@ onBeforeUnmount(() => {
 
 .site-header__navigation--left {
   justify-content: flex-start;
+
   gap: clamp(
     1.25rem,
     2.6vw,
@@ -370,6 +434,7 @@ onBeforeUnmount(() => {
 
 .site-header__navigation--right {
   justify-content: flex-end;
+
   gap: clamp(
     1rem,
     2vw,
@@ -416,17 +481,21 @@ onBeforeUnmount(() => {
   transform-origin: right;
 
   transition:
-    transform var(--duration-normal)
+    transform
+    var(--duration-normal)
     var(--ease-standard);
 }
 
 .site-header__navigation-link:hover::after,
-.site-header__navigation-link:focus-visible::after {
+.site-header__navigation-link:focus-visible::after,
+.site-header__navigation-link--active::after {
   transform: scaleX(1);
   transform-origin: left;
 }
 
 .site-header__wordmark {
+  justify-self: center;
+
   padding-inline: var(--space-5);
 
   font-family: var(--font-display);
@@ -447,10 +516,18 @@ onBeforeUnmount(() => {
   gap: 0.4375rem;
 
   min-height: 2.75rem;
+
   padding: 0;
 
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+
   transition:
-    color var(--duration-fast)
+    color
+    var(--duration-fast)
     var(--ease-standard);
 }
 
@@ -476,11 +553,17 @@ onBeforeUnmount(() => {
 .site-header__menu-button,
 .site-header__mobile-bag {
   display: none;
+
+  border: 0;
+
+  background: transparent;
+  color: inherit;
+
+  cursor: pointer;
 }
 
-/*
- * Tight laptop layout.
- */
+/* Laptop */
+
 @media (max-width: 1120px) {
   .site-header__inner {
     min-height: 4.25rem;
@@ -504,9 +587,8 @@ onBeforeUnmount(() => {
   }
 }
 
-/*
- * Mobile header.
- */
+/* Mobile header */
+
 @media (max-width: 820px) {
   .site-header__inner {
     grid-template-columns:
@@ -540,6 +622,7 @@ onBeforeUnmount(() => {
 
   .site-header__mobile-bag {
     position: relative;
+
     justify-self: end;
   }
 
@@ -561,6 +644,7 @@ onBeforeUnmount(() => {
     color: var(--colour-text-on-dark);
 
     font-size: 0.5625rem;
+
     line-height: 1;
   }
 
@@ -577,9 +661,8 @@ onBeforeUnmount(() => {
   }
 }
 
-/*
- * Mobile navigation overlay.
- */
+/* Mobile navigation drawer */
+
 .mobile-navigation {
   position: absolute;
   top: 100%;
@@ -599,6 +682,7 @@ onBeforeUnmount(() => {
 
 .mobile-navigation__inner {
   display: flex;
+
   width: min(
     calc(100% - 2.5rem),
     34rem
@@ -609,6 +693,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
 
   margin-inline: auto;
+
   padding-block:
     var(--space-7)
     var(--space-6);
@@ -616,6 +701,7 @@ onBeforeUnmount(() => {
 
 .mobile-navigation__primary {
   display: grid;
+
   gap: var(--space-5);
 }
 
@@ -643,67 +729,89 @@ onBeforeUnmount(() => {
 
 .mobile-navigation__actions button {
   display: flex;
+
   min-height: 3.75rem;
 
   align-items: center;
+
   gap: var(--space-4);
 
   padding: 0;
 
+  border: 0;
   border-bottom: var(--border-thin);
+
+  background: transparent;
+  color: inherit;
 
   font-size: var(--font-size-label);
   font-weight: 600;
 
-  letter-spacing: var(--letter-spacing-label);
+  letter-spacing:
+    var(--letter-spacing-label);
+
   text-transform: uppercase;
+
+  cursor: pointer;
 }
 
 .mobile-navigation__concierge {
   margin-top: auto;
+
   padding-top: var(--space-8);
 }
 
 .mobile-navigation__concierge p {
+  margin: 0;
+
   color: var(--colour-gold);
 
   font-size: var(--font-size-caption);
   font-weight: 600;
 
-  letter-spacing: var(--letter-spacing-label);
+  letter-spacing:
+    var(--letter-spacing-label);
+
   text-transform: uppercase;
 }
 
 .mobile-navigation__concierge a {
   display: inline-flex;
+
   align-items: center;
+
   gap: var(--space-4);
 
   margin-top: var(--space-3);
+
   padding-bottom: var(--space-2);
 
   border-bottom:
-    1px solid var(--colour-text);
+    1px solid
+    var(--colour-text);
 
   font-family: var(--font-display);
   font-size: 1.5rem;
 }
 
-/*
- * Drawer transition.
- */
+/* Drawer transition */
+
 .mobile-navigation-enter-active,
 .mobile-navigation-leave-active {
   transition:
-    opacity var(--duration-normal)
-      var(--ease-standard),
-    transform var(--duration-normal)
-      var(--ease-standard);
+    opacity
+    var(--duration-normal)
+    var(--ease-standard),
+    transform
+    var(--duration-normal)
+    var(--ease-standard);
 }
 
 .mobile-navigation-enter-from,
 .mobile-navigation-leave-to {
   opacity: 0;
-  transform: translateY(-0.75rem);
+
+  transform:
+    translateY(-0.75rem);
 }
 </style>
