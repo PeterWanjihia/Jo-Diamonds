@@ -25,21 +25,26 @@ concurrency:
 
 jobs:
   build:
+    name: Build frontend
     runs-on: ubuntu-latest
 
     env:
+      NODE_ENV: production
       NUXT_PUBLIC_APP_ENVIRONMENT: production
       NUXT_PUBLIC_API_BASE_URL: ${{ vars.NUXT_PUBLIC_API_BASE_URL }}
       NUXT_PUBLIC_SITE_URL: https://jodiamonds.store
       NUXT_APP_BASE_URL: /
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Node
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Enable Corepack
         run: corepack enable
@@ -47,10 +52,48 @@ jobs:
       - name: Validate deployment configuration
         shell: bash
         run: |
-          if [ -z "$NUXT_PUBLIC_API_BASE_URL" ]; then
-            echo "NUXT_PUBLIC_API_BASE_URL repository variable is missing."
+          set -euo pipefail
+
+          if [[ -z "${NUXT_PUBLIC_API_BASE_URL:-}" ]]; then
+            echo "::error::NUXT_PUBLIC_API_BASE_URL repository variable is missing."
             exit 1
           fi
+
+          if [[ "$NUXT_PUBLIC_API_BASE_URL" != https://* ]]; then
+            echo "::error::NUXT_PUBLIC_API_BASE_URL must use HTTPS in production."
+            exit 1
+          fi
+
+          if [[ "$NUXT_PUBLIC_API_BASE_URL" == *"/catalogue"* ]]; then
+            echo "::error::NUXT_PUBLIC_API_BASE_URL must stop at /v1. Do not include /catalogue."
+            exit 1
+          fi
+
+          if [[ "$NUXT_PUBLIC_API_BASE_URL" != */v1 ]]; then
+            echo "::error::NUXT_PUBLIC_API_BASE_URL must end exactly with /v1."
+            exit 1
+          fi
+
+          if [[ "$NUXT_PUBLIC_API_BASE_URL" == */ ]]; then
+            echo "::error::NUXT_PUBLIC_API_BASE_URL must not have a trailing slash."
+            exit 1
+          fi
+
+          if [[ "$NUXT_PUBLIC_SITE_URL" != "https://jodiamonds.store" ]]; then
+            echo "::error::NUXT_PUBLIC_SITE_URL must be https://jodiamonds.store."
+            exit 1
+          fi
+
+          if [[ "$NUXT_APP_BASE_URL" != "/" ]]; then
+            echo "::error::NUXT_APP_BASE_URL must be / for the custom apex domain."
+            exit 1
+          fi
+
+          echo "Deployment configuration validated."
+          echo "Environment: $NUXT_PUBLIC_APP_ENVIRONMENT"
+          echo "API base URL: $NUXT_PUBLIC_API_BASE_URL"
+          echo "Site URL: $NUXT_PUBLIC_SITE_URL"
+          echo "Application base URL: $NUXT_APP_BASE_URL"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -64,12 +107,31 @@ jobs:
       - name: Build Nuxt frontend
         run: pnpm --filter frontend exec nuxt build --preset github_pages
 
+      - name: Verify generated frontend
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ ! -d "frontend/.output/public" ]]; then
+            echo "::error::Nuxt did not generate frontend/.output/public."
+            exit 1
+          fi
+
+          if [[ ! -f "frontend/.output/public/index.html" ]]; then
+            echo "::error::Generated GitHub Pages artifact has no index.html."
+            exit 1
+          fi
+
+          echo "Generated frontend artifact:"
+          du -sh frontend/.output/public
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: frontend/.output/public
 
   deploy:
+    name: Deploy frontend
     needs: build
     runs-on: ubuntu-latest
 

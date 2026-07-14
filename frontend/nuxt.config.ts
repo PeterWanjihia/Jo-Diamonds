@@ -1,8 +1,10 @@
+const isProduction = process.env.NODE_ENV === 'production';
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
 
   devtools: {
-    enabled: process.env.NODE_ENV !== 'production',
+    enabled: !isProduction,
   },
 
   css: [
@@ -12,9 +14,15 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      appEnvironment: 'development',
-      apiBaseUrl: 'http://127.0.0.1:4000/v1',
-      siteUrl: 'http://localhost:3000',
+      appEnvironment: isProduction
+        ? 'production'
+        : 'development',
+
+      apiBaseUrl:
+        'http://127.0.0.1:4000/v1',
+
+      siteUrl:
+        'http://localhost:3000',
     },
   },
 
@@ -39,6 +47,7 @@ export default defineNuxtConfig({
           content: '#0d0d0c',
         },
       ],
+
       link: [
         {
           rel: 'preconnect',
