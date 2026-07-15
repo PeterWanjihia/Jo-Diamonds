@@ -13,19 +13,39 @@ const session = ref<CheckoutSessionStatusResponse | null>(null);
 const retrievalError = ref('');
 const isLoading = ref(true);
 
-const sessionId = computed(() => {
-  const value = route.query.session_id;
+function resolveSessionId(): string {
+  const routeValue = route.query.session_id;
 
-  if (typeof value === 'string') {
-    return value.trim();
+  if (typeof routeValue === 'string') {
+    const normalizedRouteValue =
+      routeValue.trim();
+
+    if (normalizedRouteValue) {
+      return normalizedRouteValue;
+    }
   }
 
-  if (Array.isArray(value)) {
-    return value[0]?.trim() ?? '';
+  if (Array.isArray(routeValue)) {
+    const normalizedRouteValue =
+      routeValue[0]?.trim() ?? '';
+
+    if (normalizedRouteValue) {
+      return normalizedRouteValue;
+    }
+  }
+
+  if (import.meta.client) {
+    return (
+      new URLSearchParams(
+        window.location.search,
+      )
+        .get('session_id')
+        ?.trim() ?? ''
+    );
   }
 
   return '';
-});
+}
 
 const paymentWasSuccessful = computed(
   () => session.value?.paymentStatus === 'paid',
@@ -51,7 +71,10 @@ async function loadCheckoutSession(): Promise<void> {
   retrievalError.value = '';
   session.value = null;
 
-  if (!sessionId.value) {
+  const currentSessionId =
+    resolveSessionId();
+
+  if (!currentSessionId) {
     retrievalError.value =
       'The Checkout Session identifier is missing.';
     isLoading.value = false;
@@ -63,7 +86,7 @@ async function loadCheckoutSession(): Promise<void> {
   try {
     session.value =
       await retrieveCheckoutSession(
-        sessionId.value,
+        currentSessionId,
       );
   } catch (error: unknown) {
     retrievalError.value =
