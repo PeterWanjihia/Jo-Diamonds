@@ -7,7 +7,9 @@ const {
   getErrorMessage,
 } = usePaymentsApi();
 
-const session = ref<CheckoutSessionStatusResponse | null>(null);
+const session =
+  ref<CheckoutSessionStatusResponse | null>(null);
+
 const retrievalError = ref('');
 const isLoading = ref(true);
 
@@ -16,9 +18,49 @@ function readSessionIdFromBrowserUrl(): string {
     return '';
   }
 
-  const url = new URL(window.location.href);
+  return (
+    new URL(window.location.href)
+      .searchParams
+      .get('session_id')
+      ?.trim() ?? ''
+  );
+}
 
-  return url.searchParams.get('session_id')?.trim() ?? '';
+async function waitForSessionId(): Promise<string> {
+  if (!import.meta.client) {
+    return '';
+  }
+
+  /*
+   * GitHub Pages serves a statically generated page.
+   * Its client-side route restoration can finish shortly
+   * after the Vue component mounts, so retry briefly instead
+   * of immediately declaring the identifier missing.
+   */
+  const maximumAttempts = 40;
+  const retryIntervalMilliseconds = 50;
+
+  for (
+    let attempt = 0;
+    attempt < maximumAttempts;
+    attempt += 1
+  ) {
+    const sessionId =
+      readSessionIdFromBrowserUrl();
+
+    if (sessionId) {
+      return sessionId;
+    }
+
+    await new Promise<void>((resolve) => {
+      window.setTimeout(
+        resolve,
+        retryIntervalMilliseconds,
+      );
+    });
+  }
+
+  return '';
 }
 
 const paymentWasSuccessful = computed(
@@ -34,7 +76,10 @@ const paymentIsProcessing = computed(
 const formattedAmount = computed(() => {
   const amount = session.value?.amountTotal;
 
-  if (amount === null || amount === undefined) {
+  if (
+    amount === null ||
+    amount === undefined
+  ) {
     return null;
   }
 
@@ -46,17 +91,16 @@ async function loadCheckoutSession(): Promise<void> {
   session.value = null;
   isLoading.value = true;
 
-  const currentSessionId =
-    readSessionIdFromBrowserUrl();
-
-  if (!currentSessionId) {
-    retrievalError.value =
-      'The Checkout Session identifier is missing.';
-    isLoading.value = false;
-    return;
-  }
-
   try {
+    const currentSessionId =
+      await waitForSessionId();
+
+    if (!currentSessionId) {
+      retrievalError.value =
+        'The Checkout Session identifier is missing.';
+      return;
+    }
+
     session.value =
       await retrieveCheckoutSession(
         currentSessionId,
@@ -69,9 +113,8 @@ async function loadCheckoutSession(): Promise<void> {
   }
 }
 
-onMounted(async () => {
-  await nextTick();
-  await loadCheckoutSession();
+onMounted(() => {
+  void loadCheckoutSession();
 });
 
 useHead({
