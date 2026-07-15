@@ -1,5 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 import BaseButton from '../base/BaseButton.vue';
+
+const config = useRuntimeConfig();
+
+const paymentsEnabled = computed(
+  () => config.public.paymentsEnabled === true,
+);
 </script>
 
 <template>
@@ -52,21 +60,22 @@ import BaseButton from '../base/BaseButton.vue';
 
         <div class="showroom-hero__actions">
           <BaseButton
+            v-if="paymentsEnabled"
+            to="/payment"
+            variant="solid"
+            tone="dark"
+            size="compact"
+          >
+            Make a secure payment
+          </BaseButton>
+
+          <BaseButton
             href="#collections"
             variant="outline"
             tone="dark"
             size="compact"
           >
             Explore the collection
-          </BaseButton>
-
-          <BaseButton
-            href="mailto:concierge@jodiamonds.store?subject=Private%20viewing%20request"
-            variant="outline"
-            tone="dark"
-            size="compact"
-          >
-            Private viewing
           </BaseButton>
         </div>
 
@@ -144,6 +153,8 @@ import BaseButton from '../base/BaseButton.vue';
 <style scoped>
 .showroom-hero {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
 
   min-height: clamp(
     31.5rem,
@@ -151,26 +162,17 @@ import BaseButton from '../base/BaseButton.vue';
     35rem
   );
 
-  overflow: hidden;
-
   background: #050504;
   color: #f8f5ef;
-
-  isolation: isolate;
 }
 
-/*
- * The photograph is a real image element rather than a CSS
- * background so the browser can prioritize it as the page's
- * largest visible asset.
- */
 .showroom-hero__media {
   position: absolute;
   inset: 0;
-
   z-index: -3;
 
   display: block;
+
   width: 100%;
   height: 100%;
 }
@@ -185,27 +187,23 @@ import BaseButton from '../base/BaseButton.vue';
   object-position: center center;
 }
 
-/*
- * The source image already contains a dark text-safe region.
- * This overlay is deliberately restrained.
- */
 .showroom-hero__scrim {
   position: absolute;
   inset: 0;
-
   z-index: -2;
 
   background:
     linear-gradient(
       90deg,
-      rgb(0 0 0 / 24%) 0%,
-      rgb(0 0 0 / 12%) 35%,
-      transparent 61%
+      rgb(0 0 0 / 52%) 0%,
+      rgb(0 0 0 / 34%) 32%,
+      rgb(0 0 0 / 10%) 62%,
+      transparent 82%
     ),
     linear-gradient(
       180deg,
-      rgb(0 0 0 / 5%) 50%,
-      rgb(0 0 0 / 16%) 100%
+      rgb(0 0 0 / 8%) 45%,
+      rgb(0 0 0 / 24%) 100%
     );
 
   pointer-events: none;
@@ -213,6 +211,7 @@ import BaseButton from '../base/BaseButton.vue';
 
 .showroom-hero__inner {
   display: flex;
+  align-items: center;
 
   width: min(
     calc(100% - (2 * var(--page-gutter))),
@@ -220,8 +219,6 @@ import BaseButton from '../base/BaseButton.vue';
   );
 
   min-height: inherit;
-
-  align-items: center;
 
   margin-inline: auto;
 
@@ -235,11 +232,13 @@ import BaseButton from '../base/BaseButton.vue';
 .showroom-hero__content {
   width: min(
     100%,
-    27rem
+    29rem
   );
 }
 
 .showroom-hero__eyebrow {
+  margin: 0;
+
   color: #c6a15b;
 
   font-family: var(--font-interface);
@@ -256,7 +255,7 @@ import BaseButton from '../base/BaseButton.vue';
   display: flex;
   flex-direction: column;
 
-  margin-top: 1.25rem;
+  margin: 1.25rem 0 0;
 
   font-family: var(--font-display);
 
@@ -281,80 +280,48 @@ import BaseButton from '../base/BaseButton.vue';
 .showroom-hero__accent {
   display: block;
 
-  width: 2.25rem;
+  width: 3.25rem;
   height: 1px;
 
-  margin-top: 1.4rem;
+  margin-top: 1.5rem;
 
   background: #c6a15b;
 }
 
 .showroom-hero__description {
-  margin-top: 1.25rem;
+  margin: 1.5rem 0 0;
 
-  color: rgb(248 245 239 / 86%);
+  color: rgb(248 245 239 / 78%);
 
   font-family: var(--font-interface);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 400;
 
-  line-height: 1.55;
+  line-height: 1.72;
+  letter-spacing: 0.015em;
 }
 
 .showroom-hero__actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.875rem;
 
-  margin-top: 1.65rem;
-}
+  gap: 0.75rem;
 
-.showroom-hero__actions
-:deep(.base-button) {
-  min-height: 2.75rem;
-
-  padding-inline: 1.5rem;
-
-  border-color:
-    rgb(248 245 239 / 60%);
-
-  background:
-    rgb(0 0 0 / 8%);
-
-  font-size: 0.625rem;
-  letter-spacing: 0.075em;
-
-  backdrop-filter: blur(2px);
-}
-
-.showroom-hero__actions
-:deep(.base-button:first-child) {
-  min-width: 14.5rem;
-}
-
-.showroom-hero__actions
-:deep(.base-button:last-child) {
-  min-width: 11rem;
-}
-
-.showroom-hero__actions
-:deep(.base-button:hover) {
-  border-color: #f8f5ef;
-
-  background: #f8f5ef;
-  color: #11110f;
+  margin-top: 1.75rem;
 }
 
 .showroom-hero__assurances {
   display: flex;
   flex-wrap: wrap;
-
   align-items: center;
 
-  gap: 0;
+  gap: 0.75rem 1.4rem;
 
-  margin: 1.85rem 0 0;
-  padding: 0;
+  margin: 2rem 0 0;
+  padding: 1.25rem 0 0;
+
+  border-top: 1px solid rgb(248 245 239 / 20%);
 
   list-style: none;
 }
@@ -362,124 +329,105 @@ import BaseButton from '../base/BaseButton.vue';
 .showroom-hero__assurance {
   display: inline-flex;
   align-items: center;
+
   gap: 0.45rem;
 
-  color: rgb(248 245 239 / 72%);
+  color: rgb(248 245 239 / 74%);
 
   font-family: var(--font-interface);
   font-size: 0.625rem;
-  font-weight: 400;
+  font-weight: 500;
 
   line-height: 1;
-  white-space: nowrap;
-}
+  letter-spacing: 0.055em;
 
-.showroom-hero__assurance
-+ .showroom-hero__assurance {
-  margin-left: 0.95rem;
-}
-
-.showroom-hero__assurance
-+ .showroom-hero__assurance::before {
-  content: '';
-
-  width: 0.1875rem;
-  height: 0.1875rem;
-
-  margin-right: 0.55rem;
-
-  background: #c6a15b;
-
-  transform: rotate(45deg);
+  text-transform: uppercase;
 }
 
 .showroom-hero__assurance svg {
-  width: 0.95rem;
-  height: 0.95rem;
+  width: 1rem;
+  height: 1rem;
 
   flex: 0 0 auto;
 
-  stroke: currentColor;
-  stroke-width: 1.25;
+  stroke: #c6a15b;
+  stroke-width: 1.35;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-/*
- * Small laptops and tablets.
- */
-@media (max-width: 1050px) {
+@media (max-width: 900px) {
   .showroom-hero {
-    min-height: 32rem;
+    min-height: 34rem;
   }
 
   .showroom-hero__image {
     object-position: 58% center;
   }
 
+  .showroom-hero__scrim {
+    background:
+      linear-gradient(
+        90deg,
+        rgb(0 0 0 / 62%) 0%,
+        rgb(0 0 0 / 40%) 52%,
+        rgb(0 0 0 / 14%) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgb(0 0 0 / 8%) 35%,
+        rgb(0 0 0 / 34%) 100%
+      );
+  }
+
   .showroom-hero__content {
     width: min(
       100%,
-      24rem
+      27rem
     );
   }
 
   .showroom-hero__title {
     font-size: clamp(
-      3.2rem,
-      5.8vw,
+      3rem,
+      7vw,
       4rem
     );
   }
-
-  .showroom-hero__actions {
-    align-items: stretch;
-    flex-direction: column;
-
-    width: 14.5rem;
-  }
-
-  .showroom-hero__actions
-  :deep(.base-button) {
-    width: 100%;
-    min-width: 0;
-  }
 }
 
-/*
- * Mobile uses the same asset temporarily.
- *
- * A dedicated portrait asset can replace it later without
- * changing the component structure.
- */
 @media (max-width: 700px) {
   .showroom-hero {
     min-height: 42rem;
   }
 
   .showroom-hero__image {
-    object-position: 68% center;
+    object-position: 64% center;
   }
 
   .showroom-hero__scrim {
     background:
       linear-gradient(
+        90deg,
+        rgb(0 0 0 / 68%) 0%,
+        rgb(0 0 0 / 48%) 65%,
+        rgb(0 0 0 / 28%) 100%
+      ),
+      linear-gradient(
         180deg,
-        rgb(0 0 0 / 8%) 0%,
-        rgb(0 0 0 / 25%) 37%,
-        rgb(0 0 0 / 90%) 68%,
-        rgb(0 0 0 / 98%) 100%
+        rgb(0 0 0 / 8%) 25%,
+        rgb(0 0 0 / 48%) 100%
       );
   }
 
   .showroom-hero__inner {
+    width: calc(100% - 2rem);
+
     align-items: flex-end;
 
-    width: calc(100% - 2.5rem);
-
     padding-block:
-      13rem
-      2.25rem;
+      4.5rem
+      3rem;
   }
 
   .showroom-hero__content {
@@ -491,57 +439,55 @@ import BaseButton from '../base/BaseButton.vue';
   }
 
   .showroom-hero__title {
-    max-width: 9ch;
-
-    margin-top: 0.9rem;
-
     font-size: clamp(
-      3rem,
-      15vw,
-      4.35rem
+      2.9rem,
+      14vw,
+      4rem
     );
 
-    line-height: 0.88;
+    line-height: 0.92;
   }
 
   .showroom-hero__description {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
   }
 
   .showroom-hero__actions {
     display: grid;
+    grid-template-columns: 1fr;
 
-    width: 100%;
-
-    gap: 0.65rem;
-
-    margin-top: 1.5rem;
+    width: min(
+      100%,
+      22rem
+    );
   }
 
-  .showroom-hero__actions
-  :deep(.base-button) {
+  .showroom-hero__actions :deep(a),
+  .showroom-hero__actions :deep(button) {
     width: 100%;
-    min-width: 0;
   }
 
   .showroom-hero__assurances {
-    row-gap: 0.75rem;
+    display: grid;
+    grid-template-columns: 1fr;
 
-    margin-top: 1.4rem;
+    gap: 0.8rem;
+
+    width: min(
+      100%,
+      22rem
+    );
   }
 }
 
-@media (max-width: 390px) {
-  .showroom-hero__inner {
-    width: calc(100% - 2rem);
-  }
-
-  .showroom-hero__title {
-    font-size: 2.85rem;
-  }
-
-  .showroom-hero__assurance {
-    font-size: 0.5625rem;
+@media (prefers-reduced-motion: reduce) {
+  .showroom-hero *,
+  .showroom-hero *::before,
+  .showroom-hero *::after {
+    scroll-behavior: auto;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
   }
 }
 </style>
