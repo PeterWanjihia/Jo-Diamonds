@@ -23,6 +23,14 @@ export default defineNuxtConfig({
 
       siteUrl:
         'http://localhost:3000',
+
+      paymentsEnabled:
+        process.env.NUXT_PUBLIC_PAYMENTS_ENABLED ===
+        'true',
+
+      stripePublishableKey:
+        process.env
+          .NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '',
     },
   },
 

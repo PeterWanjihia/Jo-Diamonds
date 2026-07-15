@@ -13,7 +13,7 @@ const postgresConnectionUrl = Joi.string().uri({
 const stripeSecretKey = Joi.string()
   .trim()
   .empty('')
-  .pattern(/^sk_(test|live)_[A-Za-z0-9]+$/);
+  .pattern(/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/);
 
 const developmentDatabaseUrl =
   'postgres://jdiamonds:jdiamonds@127.0.0.1:5432/jdiamonds_dev';
@@ -30,11 +30,7 @@ export const environmentSchema = Joi.object({
     .ip({ version: ['ipv4'] })
     .default('127.0.0.1'),
 
-  PORT: Joi.number()
-    .integer()
-    .min(1)
-    .max(65535)
-    .default(4000),
+  PORT: Joi.number().integer().min(1).max(65535).default(4000),
 
   API_PREFIX: Joi.string()
     .pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
@@ -65,9 +61,7 @@ export const environmentSchema = Joi.object({
         then: postgresConnectionUrl.required(),
       },
     ],
-    otherwise: postgresConnectionUrl.default(
-      developmentDatabaseUrl,
-    ),
+    otherwise: postgresConnectionUrl.default(developmentDatabaseUrl),
   }),
 
   TEST_DATABASE_URL: Joi.when('NODE_ENV', {
@@ -83,10 +77,7 @@ export const environmentSchema = Joi.object({
    * Environment variables arrive as strings, so Joi converts
    * "true" and "false" into real booleans.
    */
-  PAYMENTS_ENABLED: Joi.boolean()
-    .truthy('true')
-    .falsy('false')
-    .default(false),
+  PAYMENTS_ENABLED: Joi.boolean().truthy('true').falsy('false').default(false),
 
   /*
    * A Stripe secret key is required only when payment creation

@@ -86,9 +86,7 @@ describe('environmentSchema payment configuration', () => {
       PAYMENTS_ENABLED: false,
     });
 
-    expect(
-      result.value.STRIPE_SECRET_KEY,
-    ).toBeUndefined();
+    expect(result.value.STRIPE_SECRET_KEY).toBeUndefined();
   });
 
   it('allows payments to remain disabled without a Stripe key', () => {
@@ -110,25 +108,21 @@ describe('environmentSchema payment configuration', () => {
       PAYMENTS_ENABLED: 'true',
     });
 
-    expect(messages).toContain(
-      '"STRIPE_SECRET_KEY" is required',
-    );
+    expect(messages).toContain('"STRIPE_SECRET_KEY" is required');
   });
 
   it('accepts a Stripe test secret key when payments are enabled', () => {
     const result = validateEnvironment({
       NODE_ENV: 'development',
       PAYMENTS_ENABLED: 'true',
-      STRIPE_SECRET_KEY:
-        'sk_test_example123456789',
+      STRIPE_SECRET_KEY: 'sk_test_example123456789',
     });
 
     expect(result.error).toBeUndefined();
 
     expect(result.value).toMatchObject({
       PAYMENTS_ENABLED: true,
-      STRIPE_SECRET_KEY:
-        'sk_test_example123456789',
+      STRIPE_SECRET_KEY: 'sk_test_example123456789',
     });
   });
 
@@ -136,14 +130,26 @@ describe('environmentSchema payment configuration', () => {
     const messages = getErrorMessages({
       NODE_ENV: 'development',
       PAYMENTS_ENABLED: 'true',
-      STRIPE_SECRET_KEY:
-        'pk_test_example123456789',
+      STRIPE_SECRET_KEY: 'pk_test_example123456789',
     });
 
     expect(
-      messages.some((message) =>
-        message.includes('STRIPE_SECRET_KEY'),
-      ),
+      messages.some((message) => message.includes('STRIPE_SECRET_KEY')),
     ).toBe(true);
+  });
+
+  it('accepts a Stripe restricted test key when payments are enabled', () => {
+    const result = validateEnvironment({
+      NODE_ENV: 'development',
+      PAYMENTS_ENABLED: 'true',
+      STRIPE_SECRET_KEY: 'rk_test_example123456789',
+    });
+
+    expect(result.error).toBeUndefined();
+
+    expect(result.value).toMatchObject({
+      PAYMENTS_ENABLED: true,
+      STRIPE_SECRET_KEY: 'rk_test_example123456789',
+    });
   });
 });

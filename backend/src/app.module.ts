@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { CatalogueModule } from './catalogue';
 import { environmentSchema } from './config/environment.schema';
 import { DatabaseModule } from './database';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { DatabaseModule } from './database';
     }),
     DatabaseModule,
     CatalogueModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
