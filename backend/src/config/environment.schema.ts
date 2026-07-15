@@ -4,6 +4,17 @@ const postgresConnectionUrl = Joi.string().uri({
   scheme: ['postgres', 'postgresql'],
 });
 
+/*
+ * Stripe secret keys are private backend credentials.
+ *
+ * Accept test and live secret keys, but reject publishable
+ * frontend keys such as pk_test_...
+ */
+const stripeSecretKey = Joi.string()
+  .trim()
+  .empty('')
+  .pattern(/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/);
+
 const developmentDatabaseUrl =
   'postgres://jdiamonds:jdiamonds@127.0.0.1:5432/jdiamonds_dev';
 
@@ -57,5 +68,24 @@ export const environmentSchema = Joi.object({
     is: 'test',
     then: postgresConnectionUrl.default(testDatabaseUrl),
     otherwise: postgresConnectionUrl.optional(),
+  }),
+
+  /*
+   * Payments are inactive unless the deployment explicitly
+   * enables them.
+   *
+   * Environment variables arrive as strings, so Joi converts
+   * "true" and "false" into real booleans.
+   */
+  PAYMENTS_ENABLED: Joi.boolean().truthy('true').falsy('false').default(false),
+
+  /*
+   * A Stripe secret key is required only when payment creation
+   * has been enabled.
+   */
+  STRIPE_SECRET_KEY: Joi.when('PAYMENTS_ENABLED', {
+    is: true,
+    then: stripeSecretKey.required(),
+    otherwise: stripeSecretKey.optional(),
   }),
 });
