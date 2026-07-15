@@ -2,8 +2,6 @@
 import type { CheckoutSessionStatusResponse } from '~/types/payments';
 import { formatGbpFromPence } from '~/utils/format-gbp-from-pence';
 
-const route = useRoute();
-
 const {
   retrieveCheckoutSession,
   getErrorMessage,
@@ -13,38 +11,14 @@ const session = ref<CheckoutSessionStatusResponse | null>(null);
 const retrievalError = ref('');
 const isLoading = ref(true);
 
-function resolveSessionId(): string {
-  const routeValue = route.query.session_id;
-
-  if (typeof routeValue === 'string') {
-    const normalizedRouteValue =
-      routeValue.trim();
-
-    if (normalizedRouteValue) {
-      return normalizedRouteValue;
-    }
+function readSessionIdFromBrowserUrl(): string {
+  if (!import.meta.client) {
+    return '';
   }
 
-  if (Array.isArray(routeValue)) {
-    const normalizedRouteValue =
-      routeValue[0]?.trim() ?? '';
+  const url = new URL(window.location.href);
 
-    if (normalizedRouteValue) {
-      return normalizedRouteValue;
-    }
-  }
-
-  if (import.meta.client) {
-    return (
-      new URLSearchParams(
-        window.location.search,
-      )
-        .get('session_id')
-        ?.trim() ?? ''
-    );
-  }
-
-  return '';
+  return url.searchParams.get('session_id')?.trim() ?? '';
 }
 
 const paymentWasSuccessful = computed(
@@ -70,9 +44,10 @@ const formattedAmount = computed(() => {
 async function loadCheckoutSession(): Promise<void> {
   retrievalError.value = '';
   session.value = null;
+  isLoading.value = true;
 
   const currentSessionId =
-    resolveSessionId();
+    readSessionIdFromBrowserUrl();
 
   if (!currentSessionId) {
     retrievalError.value =
@@ -80,8 +55,6 @@ async function loadCheckoutSession(): Promise<void> {
     isLoading.value = false;
     return;
   }
-
-  isLoading.value = true;
 
   try {
     session.value =
@@ -96,8 +69,9 @@ async function loadCheckoutSession(): Promise<void> {
   }
 }
 
-onMounted(() => {
-  void loadCheckoutSession();
+onMounted(async () => {
+  await nextTick();
+  await loadCheckoutSession();
 });
 
 useHead({
