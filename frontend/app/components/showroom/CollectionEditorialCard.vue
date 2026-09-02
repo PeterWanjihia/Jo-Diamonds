@@ -181,6 +181,7 @@ defineProps<{
   letter-spacing: 0.035em;
 
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .collection-card__description {
@@ -189,7 +190,7 @@ defineProps<{
   margin-top: 0.5rem;
 
   font-family: var(--font-interface);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 400;
 
   line-height: 1.45;
@@ -213,7 +214,7 @@ defineProps<{
   margin-top: 0.85rem;
 
   font-family: var(--font-interface);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1;

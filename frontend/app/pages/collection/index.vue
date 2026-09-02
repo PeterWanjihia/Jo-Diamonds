@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
+import ProductSummaryCard
+  from '../../components/catalogue/ProductSummaryCard.vue';
+
 import CollectionFeaturedPiece
   from '../../components/collection/CollectionFeaturedPiece.vue';
 
@@ -24,13 +29,74 @@ import {
   useShowroomData,
 } from '../../composables/use-showroom-data';
 
+import {
+  collectionLandingOrder,
+} from '../../config/collection-landing';
+
+const route = useRoute();
+
 const {
+  products,
   collections,
   featuredProduct,
   isPending,
   error,
   refresh,
 } = useShowroomData();
+
+const selectedCollectionSlug = computed(() => {
+  const queryValue = route.query.collection;
+  const candidate = Array.isArray(queryValue)
+    ? queryValue[0]
+    : queryValue;
+
+  if (
+    typeof candidate === 'string' &&
+    (collectionLandingOrder as readonly string[])
+      .includes(candidate)
+  ) {
+    return candidate;
+  }
+
+  return null;
+});
+
+const selectedCollection = computed(() =>
+  selectedCollectionSlug.value
+    ? collections.value.find(
+        (collection) =>
+          collection.slug === selectedCollectionSlug.value,
+      ) ?? null
+    : null,
+);
+
+const visibleProducts = computed(() => {
+  if (!selectedCollectionSlug.value) {
+    return products.value;
+  }
+
+  return products.value.filter(
+    (product) =>
+      product.collection?.slug ===
+      selectedCollectionSlug.value,
+  );
+});
+
+const collectionFeaturedProduct = computed(
+  () =>
+    visibleProducts.value.find(
+      (product) => product.isFeatured,
+    ) ??
+    visibleProducts.value[0] ??
+    featuredProduct.value,
+);
+
+const piecesTitle = computed(
+  () =>
+    selectedCollection.value
+      ? `${selectedCollection.value.name} pieces`
+      : 'The pieces',
+);
 
 useSeoMeta({
   title: 'The Collection',
@@ -89,9 +155,55 @@ useSeoMeta({
         :collections="collections"
       />
 
+      <section
+        class="collection-page__pieces"
+        aria-labelledby="collection-pieces-title"
+      >
+        <header class="collection-page__pieces-heading">
+          <div>
+            <p>Discover</p>
+            <h2 id="collection-pieces-title">
+              {{ piecesTitle }}
+            </h2>
+          </div>
+
+          <NuxtLink
+            v-if="selectedCollectionSlug"
+            to="/collection"
+          >
+            View all pieces
+          </NuxtLink>
+        </header>
+
+        <div
+          v-if="visibleProducts.length"
+          class="collection-page__pieces-grid"
+        >
+          <ProductSummaryCard
+            v-for="product in visibleProducts"
+            :key="product.slug"
+            :product="product"
+          />
+        </div>
+
+        <div
+          v-else
+          class="collection-page__pieces-empty"
+        >
+          <p>
+            No pieces from this collection are currently
+            available online.
+          </p>
+
+          <NuxtLink to="/collection">
+            Explore all available pieces
+          </NuxtLink>
+        </div>
+      </section>
+
       <CollectionFeaturedPiece
-        v-if="featuredProduct"
-        :product="featuredProduct"
+        v-if="collectionFeaturedProduct"
+        :product="collectionFeaturedProduct"
       />
 
     </template>
@@ -145,7 +257,7 @@ useSeoMeta({
 }
 
 .collection-page__retry {
-  min-height: 2.5rem;
+  min-height: 2.75rem;
 
   padding:
     0
@@ -188,5 +300,101 @@ useSeoMeta({
     #a47b3f;
 
   outline-offset: 3px;
+}
+
+.collection-page__pieces {
+  width: min(
+    calc(100% - (2 * var(--page-gutter))),
+    var(--container-wide)
+  );
+  margin-inline: auto;
+  padding-block: clamp(4rem, 8vw, 7rem);
+}
+
+.collection-page__pieces-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.collection-page__pieces-heading p {
+  margin: 0 0 var(--space-3);
+  color: var(--colour-gold);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.collection-page__pieces-heading h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+.collection-page__pieces-heading > a,
+.collection-page__pieces-empty a {
+  display: inline-flex;
+  max-width: 100%;
+  min-height: 2.75rem;
+  align-items: center;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid currentColor;
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.collection-page__pieces-heading > a:hover,
+.collection-page__pieces-empty a:hover {
+  color: var(--colour-gold);
+}
+
+.collection-page__pieces-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.collection-page__pieces-empty {
+  display: grid;
+  min-height: 16rem;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-5);
+  border-block: var(--border-thin);
+  text-align: center;
+}
+
+.collection-page__pieces-empty p {
+  margin: 0;
+  color: var(--colour-text-muted);
+}
+
+@media (max-width: 900px) {
+  .collection-page__pieces-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .collection-page__pieces {
+    width: calc(100% - 2rem);
+  }
+
+  .collection-page__pieces-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .collection-page__pieces-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

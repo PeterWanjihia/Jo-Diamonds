@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {
   computed,
+  nextTick,
   onBeforeUnmount,
+  onMounted,
   ref,
   watch,
 } from 'vue';
@@ -9,6 +11,8 @@ import {
 const route = useRoute();
 
 const isMenuOpen = ref(false);
+const menuButton = ref<HTMLButtonElement | null>(null);
+const mobileNavigation = ref<HTMLElement | null>(null);
 
 const isCollectionRoute = computed(
   () => route.path.startsWith('/collection'),
@@ -35,6 +39,60 @@ function toggleMenu(): void {
   isMenuOpen.value = !isMenuOpen.value;
 }
 
+function handleKeydown(event: KeyboardEvent): void {
+  if (!isMenuOpen.value) {
+    return;
+  }
+
+  if (event.key === 'Escape') {
+    closeMenu();
+    void nextTick(() => {
+      menuButton.value?.focus();
+    });
+    return;
+  }
+
+  if (event.key !== 'Tab') {
+    return;
+  }
+
+  const drawerLinks = [
+    ...(mobileNavigation.value?.querySelectorAll<HTMLElement>(
+      'a[href]',
+    ) ?? []),
+  ];
+
+  const focusableElements = [
+    menuButton.value,
+    ...drawerLinks,
+  ].filter(
+    (element): element is HTMLElement =>
+      element !== null,
+  );
+
+  const firstElement = focusableElements[0];
+  const lastElement =
+    focusableElements[focusableElements.length - 1];
+
+  if (!firstElement || !lastElement) {
+    return;
+  }
+
+  if (
+    event.shiftKey &&
+    document.activeElement === firstElement
+  ) {
+    event.preventDefault();
+    lastElement.focus();
+  } else if (
+    !event.shiftKey &&
+    document.activeElement === lastElement
+  ) {
+    event.preventDefault();
+    firstElement.focus();
+  }
+}
+
 watch(
   () => route.fullPath,
   () => {
@@ -49,6 +107,18 @@ watch(isMenuOpen, (isOpen) => {
 
   document.documentElement.style.overflow =
     isOpen ? 'hidden' : '';
+
+  if (isOpen) {
+    void nextTick(() => {
+      mobileNavigation.value
+        ?.querySelector<HTMLElement>('a')
+        ?.focus();
+    });
+  }
+});
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown);
 });
 
 onBeforeUnmount(() => {
@@ -57,6 +127,7 @@ onBeforeUnmount(() => {
   }
 
   document.documentElement.style.overflow = '';
+  window.removeEventListener('keydown', handleKeydown);
 });
 </script>
 
@@ -65,6 +136,7 @@ onBeforeUnmount(() => {
     <div class="site-header__inner">
       <!-- Mobile menu button -->
       <button
+        ref="menuButton"
         class="site-header__menu-button"
         type="button"
         aria-controls="mobile-navigation"
@@ -144,116 +216,6 @@ onBeforeUnmount(() => {
       >
         JO.DIAMONDS
       </NuxtLink>
-
-      <!-- Desktop right navigation -->
-      <nav
-        class="
-          site-header__navigation
-          site-header__navigation--right
-        "
-        aria-label="Customer navigation"
-      >
-        <button
-          class="site-header__action"
-          type="button"
-          aria-label="Search the collection"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <circle
-              cx="11"
-              cy="11"
-              r="6.5"
-            />
-
-            <path d="m16 16 4 4" />
-          </svg>
-
-          <span>Search</span>
-        </button>
-
-        <button
-          class="site-header__action"
-          type="button"
-          aria-label="Customer account"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <circle
-              cx="12"
-              cy="8"
-              r="3.5"
-            />
-
-            <path
-              d="
-                M5.5 20
-                c.6-4 3-6 6.5-6
-                s5.9 2 6.5 6
-              "
-            />
-          </svg>
-
-          <span>Account</span>
-        </button>
-
-        <button
-          class="site-header__action"
-          type="button"
-          aria-label="Private bag, zero items"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path d="M5 8.5h14l1 12H4z" />
-
-            <path
-              d="
-                M8.5 9
-                V6.5
-                a3.5 3.5 0 0 1 7 0
-                V9
-              "
-            />
-          </svg>
-
-          <span>Bag (0)</span>
-        </button>
-      </nav>
-
-      <!-- Mobile bag button -->
-      <button
-        class="site-header__mobile-bag"
-        type="button"
-        aria-label="Private bag, zero items"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path d="M5 8.5h14l1 12H4z" />
-
-          <path
-            d="
-              M8.5 9
-              V6.5
-              a3.5 3.5 0 0 1 7 0
-              V9
-            "
-          />
-        </svg>
-
-        <span>0</span>
-      </button>
     </div>
 
     <!-- Mobile navigation drawer -->
@@ -261,6 +223,7 @@ onBeforeUnmount(() => {
       <div
         v-if="isMenuOpen"
         id="mobile-navigation"
+        ref="mobileNavigation"
         class="mobile-navigation"
       >
         <nav
@@ -288,73 +251,6 @@ onBeforeUnmount(() => {
             >
               Private Viewing
             </NuxtLink>
-          </div>
-
-          <div class="mobile-navigation__actions">
-            <button type="button">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <circle
-                  cx="11"
-                  cy="11"
-                  r="6.5"
-                />
-
-                <path d="m16 16 4 4" />
-              </svg>
-
-              Search
-            </button>
-
-            <button type="button">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <circle
-                  cx="12"
-                  cy="8"
-                  r="3.5"
-                />
-
-                <path
-                  d="
-                    M5.5 20
-                    c.6-4 3-6 6.5-6
-                    s5.9 2 6.5 6
-                  "
-                />
-              </svg>
-
-              Account
-            </button>
-
-            <button type="button">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M5 8.5h14l1 12H4z"
-                />
-
-                <path
-                  d="
-                    M8.5 9
-                    V6.5
-                    a3.5 3.5 0 0 1 7 0
-                    V9
-                  "
-                />
-              </svg>
-
-              Private Bag (0)
-            </button>
           </div>
 
           <div class="mobile-navigation__concierge">
@@ -432,18 +328,7 @@ onBeforeUnmount(() => {
   );
 }
 
-.site-header__navigation--right {
-  justify-content: flex-end;
-
-  gap: clamp(
-    1rem,
-    2vw,
-    2rem
-  );
-}
-
-.site-header__navigation-link,
-.site-header__action {
+.site-header__navigation-link {
   position: relative;
 
   display: inline-flex;
@@ -494,7 +379,10 @@ onBeforeUnmount(() => {
 }
 
 .site-header__wordmark {
+  display: inline-flex;
   justify-self: center;
+  min-height: 2.75rem;
+  align-items: center;
 
   padding-inline: var(--space-5);
 
@@ -512,33 +400,7 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 
-.site-header__action {
-  gap: 0.4375rem;
-
-  min-height: 2.75rem;
-
-  padding: 0;
-
-  border: 0;
-
-  background: transparent;
-
-  cursor: pointer;
-
-  transition:
-    color
-    var(--duration-fast)
-    var(--ease-standard);
-}
-
-.site-header__action:hover {
-  color: var(--colour-gold);
-}
-
-.site-header__action svg,
-.site-header__menu-button svg,
-.site-header__mobile-bag svg,
-.mobile-navigation__actions svg {
+.site-header__menu-button svg {
   width: 1.125rem;
   height: 1.125rem;
 
@@ -550,8 +412,7 @@ onBeforeUnmount(() => {
   stroke-linejoin: round;
 }
 
-.site-header__menu-button,
-.site-header__mobile-bag {
+.site-header__menu-button {
   display: none;
 
   border: 0;
@@ -573,12 +434,7 @@ onBeforeUnmount(() => {
     gap: 1.25rem;
   }
 
-  .site-header__navigation--right {
-    gap: 1rem;
-  }
-
-  .site-header__navigation-link,
-  .site-header__action {
+  .site-header__navigation-link {
     font-size: 0.625rem;
   }
 
@@ -604,48 +460,16 @@ onBeforeUnmount(() => {
     display: none;
   }
 
-  .site-header__menu-button,
-  .site-header__mobile-bag {
+  .site-header__menu-button {
     display: inline-grid;
 
     width: 2.75rem;
     height: 2.75rem;
 
     place-items: center;
+    justify-self: start;
 
     padding: 0;
-  }
-
-  .site-header__menu-button {
-    justify-self: start;
-  }
-
-  .site-header__mobile-bag {
-    position: relative;
-
-    justify-self: end;
-  }
-
-  .site-header__mobile-bag span {
-    position: absolute;
-    top: 0.25rem;
-    right: 0.125rem;
-
-    display: grid;
-
-    min-width: 1rem;
-    height: 1rem;
-
-    place-items: center;
-
-    border-radius: 999px;
-
-    background: var(--colour-ink);
-    color: var(--colour-text-on-dark);
-
-    font-size: 0.5625rem;
-
-    line-height: 1;
   }
 
   .site-header__wordmark {
@@ -706,8 +530,12 @@ onBeforeUnmount(() => {
 }
 
 .mobile-navigation__primary a {
+  display: flex;
   width: fit-content;
+  max-width: 100%;
+  min-height: 2.75rem;
 
+  align-items: center;
   font-family: var(--font-display);
   font-size: clamp(
     2.25rem,
@@ -717,42 +545,7 @@ onBeforeUnmount(() => {
   font-weight: 400;
 
   line-height: 1.05;
-}
-
-.mobile-navigation__actions {
-  display: grid;
-
-  margin-top: var(--space-7);
-
-  border-top: var(--border-thin);
-}
-
-.mobile-navigation__actions button {
-  display: flex;
-
-  min-height: 3.75rem;
-
-  align-items: center;
-
-  gap: var(--space-4);
-
-  padding: 0;
-
-  border: 0;
-  border-bottom: var(--border-thin);
-
-  background: transparent;
-  color: inherit;
-
-  font-size: var(--font-size-label);
-  font-weight: 600;
-
-  letter-spacing:
-    var(--letter-spacing-label);
-
-  text-transform: uppercase;
-
-  cursor: pointer;
+  overflow-wrap: anywhere;
 }
 
 .mobile-navigation__concierge {
@@ -777,6 +570,8 @@ onBeforeUnmount(() => {
 
 .mobile-navigation__concierge a {
   display: inline-flex;
+  max-width: 100%;
+  min-height: 2.75rem;
 
   align-items: center;
 
@@ -792,6 +587,7 @@ onBeforeUnmount(() => {
 
   font-family: var(--font-display);
   font-size: 1.5rem;
+  overflow-wrap: anywhere;
 }
 
 /* Drawer transition */

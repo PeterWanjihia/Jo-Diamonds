@@ -42,7 +42,7 @@ export const productServices = pgTable(
       mode: 'number',
     }),
 
-    currency: text('currency').notNull().default('KES'),
+    currency: text('currency').notNull().default('GBP'),
 
     leadTimeDays: integer('lead_time_days'),
 
@@ -82,8 +82,8 @@ export const productServices = pgTable(
     ),
 
     check(
-      'product_services_currency_format_check',
-      sql`${table.currency} ~ '^[A-Z]{3}$'`,
+      'product_services_currency_gbp_check',
+      sql`${table.currency} = 'GBP'`,
     ),
 
     check(

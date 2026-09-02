@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import StripeEmbeddedCheckout from '~/components/payment/StripeEmbeddedCheckout.vue';
 
+const route = useRoute();
+
 const {
   paymentsEnabled,
   stripePublishableKey,
@@ -8,8 +10,22 @@ const {
   getErrorMessage,
 } = usePaymentsApi();
 
+function getInitialReference(
+  value: unknown,
+): string {
+  const candidate = Array.isArray(value)
+    ? value[0]
+    : value;
+
+  return typeof candidate === 'string'
+    ? candidate.trim().slice(0, 120)
+    : '';
+}
+
 const amount = ref('');
-const reference = ref('');
+const reference = ref(
+  getInitialReference(route.query.reference),
+);
 const clientSecret = ref<string | null>(null);
 const submissionError = ref('');
 const isSubmitting = ref(false);
@@ -380,6 +396,7 @@ useSeoMeta({
   font-size: clamp(3.25rem, 8vw, 6.5rem);
   line-height: 0.9;
   letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
 .payment-page__description {
@@ -393,6 +410,7 @@ useSeoMeta({
 
 .payment-page__panel {
   width: min(100%, 44rem);
+  min-width: 0;
   margin: 0 auto;
   padding: clamp(1.75rem, 5vw, 3.5rem);
   border: 1px solid rgb(24 23 20 / 12%);
@@ -404,6 +422,7 @@ useSeoMeta({
 .payment-page__panel-title {
   font-size: clamp(2.1rem, 5vw, 3.25rem);
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .payment-page__supporting-copy {
@@ -431,6 +450,7 @@ useSeoMeta({
 
 .payment-form__label {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
   font-family: Inter, sans-serif;
@@ -509,6 +529,7 @@ useSeoMeta({
   font-size: 0.86rem;
   line-height: 1.55;
   color: #7d2c25;
+  overflow-wrap: anywhere;
 }
 
 .payment-form__submit {
@@ -522,6 +543,7 @@ useSeoMeta({
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
   cursor: pointer;
   transition:
     background 160ms ease,
@@ -558,12 +580,16 @@ useSeoMeta({
 }
 
 .payment-checkout__mount {
+  width: 100%;
+  min-width: 0;
   min-height: 28rem;
   padding: 1rem 0;
   background: #fff;
 }
 
 .payment-checkout__back {
+  max-width: 100%;
+  min-height: 2.75rem;
   justify-self: start;
   padding: 0;
   border: 0;
@@ -575,6 +601,7 @@ useSeoMeta({
   text-transform: uppercase;
   color: #57524a;
   cursor: pointer;
+  overflow-wrap: anywhere;
 }
 
 .payment-page__trust {
@@ -600,6 +627,7 @@ useSeoMeta({
 .payment-page__trust strong,
 .payment-page__trust span {
   font-family: Inter, sans-serif;
+  overflow-wrap: anywhere;
 }
 
 .payment-page__trust strong {
@@ -629,6 +657,29 @@ useSeoMeta({
   .payment-page__trust div + div {
     border-top: 1px solid rgb(24 23 20 / 12%);
     border-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-page {
+    padding-inline: 0;
+  }
+
+  .payment-page__intro {
+    padding-inline: 1rem;
+  }
+
+  .payment-page__panel {
+    padding: 1.25rem 1rem;
+    border-inline: 0;
+  }
+
+  .payment-form__input {
+    font-size: 1rem;
+  }
+
+  .payment-page__trust {
+    width: calc(100% - 2rem);
   }
 }
 </style>

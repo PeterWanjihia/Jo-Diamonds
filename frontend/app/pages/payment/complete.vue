@@ -342,6 +342,7 @@ useSeoMeta({
 
 .confirmation-card {
   width: min(100%, 44rem);
+  min-width: 0;
   padding: clamp(2rem, 6vw, 4.5rem);
   border: 1px solid rgb(24 23 20 / 12%);
   background: rgb(255 255 255 / 90%);
@@ -390,6 +391,7 @@ useSeoMeta({
   font-weight: 500;
   line-height: 0.95;
   letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
 .confirmation-card__copy {
@@ -454,6 +456,8 @@ useSeoMeta({
   text-decoration: none;
   text-transform: uppercase;
   cursor: pointer;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .confirmation-card__primary-action {
@@ -486,6 +490,10 @@ useSeoMeta({
 }
 
 @media (max-width: 600px) {
+  .confirmation-page {
+    padding-inline: 1rem;
+  }
+
   .confirmation-card {
     padding: 2rem 1.25rem;
   }
@@ -493,6 +501,20 @@ useSeoMeta({
   .confirmation-details div {
     grid-template-columns: 1fr;
     gap: 0.35rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .confirmation-page {
+    padding-inline: 0.75rem;
+  }
+
+  .confirmation-card {
+    padding-inline: 1rem;
+  }
+
+  .confirmation-card__title {
+    font-size: 2.75rem;
   }
 }
 </style>

@@ -171,23 +171,27 @@ const conciergePhoneHref =
 
           <ul class="site-footer__links">
             <li>
-              <a href="#collections">Rings</a>
+              <NuxtLink
+                to="/collection?collection=signature-solitaires"
+              >
+                Signature Solitaires
+              </NuxtLink>
             </li>
 
             <li>
-              <a href="#collections">Earrings</a>
+              <NuxtLink
+                to="/collection?collection=modern-icons"
+              >
+                Modern Icons
+              </NuxtLink>
             </li>
 
             <li>
-              <a href="#collections">Necklaces</a>
-            </li>
-
-            <li>
-              <a href="#collections">Bracelets</a>
-            </li>
-
-            <li>
-              <a href="#collections">One-of-One</a>
+              <NuxtLink
+                to="/collection?collection=heritage-halo"
+              >
+                Heritage Halo
+              </NuxtLink>
             </li>
           </ul>
         </section>
@@ -359,9 +363,9 @@ const conciergePhoneHref =
   margin-inline: auto;
 
   padding:
-    1.75rem
+    clamp(2.5rem, 5vw, 4.5rem)
     0
-    1rem;
+    1.5rem;
 }
 
 .site-footer__columns {
@@ -388,10 +392,12 @@ const conciergePhoneHref =
 }
 
 .site-footer__wordmark {
-  display: inline-block;
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
 
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: clamp(1.5rem, 2vw, 2rem);
   font-weight: 500;
 
   line-height: 1;
@@ -404,7 +410,7 @@ const conciergePhoneHref =
   color: rgb(243 239 231 / 69%);
 
   font-family: var(--font-interface);
-  font-size: 0.56rem;
+  font-size: 0.75rem;
 
   line-height: 1.55;
 }
@@ -413,7 +419,7 @@ const conciergePhoneHref =
   display: flex;
   align-items: center;
 
-  gap: 0.75rem;
+  gap: 0.85rem;
 
   margin-top: 0.8rem;
 }
@@ -421,12 +427,18 @@ const conciergePhoneHref =
 .site-footer__social {
   display: grid;
 
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
 
   place-items: center;
 
   color: rgb(243 239 231 / 76%);
+}
+
+a.site-footer__social {
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.75rem;
 }
 
 .site-footer__social svg {
@@ -445,7 +457,7 @@ const conciergePhoneHref =
   color: rgb(243 239 231 / 91%);
 
   font-family: var(--font-interface);
-  font-size: 0.52rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1;
@@ -470,10 +482,11 @@ const conciergePhoneHref =
   color: rgb(243 239 231 / 67%);
 
   font-family: var(--font-interface);
-  font-size: 0.52rem;
+  font-size: 0.6875rem;
   font-weight: 400;
 
-  line-height: 1.3;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .site-footer__links a {
@@ -591,7 +604,7 @@ const conciergePhoneHref =
   color: rgb(243 239 231 / 56%);
 
   font-family: var(--font-interface);
-  font-size: 0.45rem;
+  font-size: 0.6875rem;
 }
 
 .site-footer__bottom p {
@@ -636,6 +649,12 @@ const conciergePhoneHref =
   .site-footer__legal {
     flex-wrap: wrap;
   }
+
+  .site-footer__links a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+  }
 }
 
 /* Mobile */
@@ -644,7 +663,7 @@ const conciergePhoneHref =
   .site-footer__inner {
     width: calc(100% - 2rem);
 
-    padding-top: 2rem;
+    padding-top: 3rem;
   }
 
   .site-footer__columns {

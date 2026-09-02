@@ -121,6 +121,8 @@ onBeforeUnmount(() => {
 <style scoped>
 .stripe-embedded-checkout {
   position: relative;
+  width: 100%;
+  min-width: 0;
   min-height: 28rem;
 }
 
@@ -136,9 +138,21 @@ onBeforeUnmount(() => {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #79746b;
+  padding: 1rem;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .stripe-embedded-checkout__mount {
+  width: 100%;
+  min-width: 0;
   min-height: 28rem;
+}
+
+.stripe-embedded-checkout__mount :deep(iframe) {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  border: 0;
 }
 </style>

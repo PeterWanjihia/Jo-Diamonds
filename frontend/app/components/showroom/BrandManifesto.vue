@@ -87,7 +87,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   margin: 0;
 
   font-family: var(--font-interface);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1;
@@ -157,7 +157,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   color: rgb(23 22 18 / 76%);
 
   font-family: var(--font-interface);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 400;
 
   line-height: 1.55;
@@ -168,13 +168,13 @@ import BaseTextLink from '../base/BaseTextLink.vue';
 }
 
 .brand-manifesto__link {
-  min-height: 2rem;
+  min-height: 2.75rem;
 
   margin-top: 0.7rem;
 
   border-bottom: 0;
 
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.08em;
 }
 

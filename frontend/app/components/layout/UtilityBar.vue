@@ -209,63 +209,57 @@ const visibleItems = computed(() =>
   }
 }
 
-/*
- * Mobile:
- * keep the major visual promises and the Stripe message.
- * Certification remains available elsewhere in the page.
- */
+/* Mobile: keep every service promise visible in a compact grid. */
 @media (max-width: 640px) {
   .utility-bar {
-    min-height: 2rem;
+    min-height: 0;
   }
 
   .utility-bar__inner {
-    width: calc(100% - 1.5rem);
-    min-height: 2rem;
+    width: calc(100% - 2rem);
+    min-height: 0;
+    padding-block: 0.35rem;
   }
 
-  .utility-bar__item:nth-child(3) {
-    display: none;
+  .utility-bar__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 0.2rem 1rem;
   }
 
-  .utility-bar__item {
-    font-size: 0.5625rem;
-  }
-
+  .utility-bar__item,
   .utility-bar__item + .utility-bar__item {
-    margin-left: 0.625rem;
+    min-width: 0;
+    min-height: 1.5rem;
+    margin-left: 0;
+    font-size: 0.625rem;
+    line-height: 1.25;
+    white-space: normal;
   }
 
   .utility-bar__item + .utility-bar__item::before {
-    width: 0.15625rem;
-    height: 0.15625rem;
-
-    margin-right: 0.25rem;
+    display: none;
   }
 
   .utility-bar__icon {
     width: 0.75rem;
     height: 0.75rem;
   }
+
+  .utility-bar__label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
 }
 
-/*
- * Very narrow phones:
- * show the two service-oriented end messages.
- */
-@media (max-width: 430px) {
+@media (max-width: 350px) {
+  .utility-bar__inner {
+    width: calc(100% - 1.5rem);
+  }
+
   .utility-bar__list {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .utility-bar__item:nth-child(2),
-  .utility-bar__item:nth-child(3) {
-    display: none;
-  }
-
-  .utility-bar__item + .utility-bar__item {
-    margin-left: 0.75rem;
+    column-gap: 0.65rem;
   }
 }
 </style>

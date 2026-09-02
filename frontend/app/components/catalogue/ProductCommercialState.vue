@@ -40,6 +40,8 @@ const positive = computed(() =>
 <style scoped>
 .commercial-state {
   display: inline-flex;
+  max-width: 100%;
+  min-width: 0;
   align-items: center;
   gap: var(--space-3);
 
@@ -48,8 +50,10 @@ const positive = computed(() =>
   font-size: var(--font-size-label);
   font-weight: 600;
 
+  line-height: 1.4;
   letter-spacing: var(--letter-spacing-label);
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .commercial-state__indicator {

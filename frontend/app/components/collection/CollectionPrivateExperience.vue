@@ -168,7 +168,7 @@ const conciergeUrl =
     rgb(25 23 19 / 68%);
 
   font-family: var(--font-interface);
-  font-size: 0.53rem;
+  font-size: 0.75rem;
   font-weight: 400;
 
   line-height: 1.45;
@@ -176,7 +176,7 @@ const conciergeUrl =
 
 .private-experience__button {
   min-width: 12rem;
-  min-height: 2.5rem;
+  min-height: 2.75rem;
 }
 
 .private-experience__button :deep(.base-button__content) {
@@ -236,7 +236,7 @@ const conciergeUrl =
   .private-experience__description {
     max-width: 28rem;
 
-    font-size: 0.58rem;
+    font-size: 0.8125rem;
   }
 
   .private-experience__button {

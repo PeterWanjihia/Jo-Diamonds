@@ -10,7 +10,7 @@ import type {
 
 export interface CataloguePrice {
   readonly minor: number;
-  readonly currency: string;
+  readonly currency: 'GBP';
 }
 
 export type CatalogueSupply =

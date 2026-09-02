@@ -86,11 +86,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
     var(--container-wide)
   );
 
-  height: clamp(
-    9.75rem,
-    13vw,
-    11.5rem
-  );
+  min-height: clamp(12rem, 15vw, 14rem);
 
   margin-inline: auto;
 
@@ -119,15 +115,12 @@ import BaseTextLink from '../base/BaseTextLink.vue';
 .collection-craft__image {
   position: absolute;
 
-  top: -17%;
-  left: -2%;
+  inset: 0;
 
   display: block;
 
-  width: 132%;
-  height: 134%;
-
-  max-width: none;
+  width: 100%;
+  height: 100%;
 
   object-fit: cover;
   object-position: left center;
@@ -205,7 +198,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   color: #b78e4e;
 
   font-family: var(--font-interface);
-  font-size: 0.5rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1;
@@ -234,6 +227,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   letter-spacing: 0.035em;
 
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .collection-craft__description {
@@ -248,7 +242,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
     rgb(245 240 232 / 75%);
 
   font-family: var(--font-interface);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   font-weight: 400;
 
   line-height: 1.65;
@@ -256,7 +250,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
 
 .collection-craft__link {
   width: fit-content;
-  min-height: 1.8rem;
+  min-height: 2.75rem;
 
   margin-top: 0.65rem;
 
@@ -264,7 +258,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
 
   color: #f5f0e8;
 
-  font-size: 0.52rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   letter-spacing: 0.08em;
@@ -284,15 +278,11 @@ import BaseTextLink from '../base/BaseTextLink.vue';
       minmax(0, 45%)
       minmax(0, 55%);
 
-    height: 12rem;
+    min-height: 13rem;
   }
 
   .collection-craft__image {
-    top: -10%;
-    left: -5%;
-
-    width: 142%;
-    height: 120%;
+    inset: 0;
   }
 
   .collection-craft__content {
@@ -306,7 +296,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   }
 
   .collection-craft__description {
-    font-size: 0.56rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -325,7 +315,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
     grid-template-columns: 1fr;
 
     width: calc(100% - 2rem);
-    height: auto;
+    min-height: 0;
   }
 
   .collection-craft__media {
@@ -333,11 +323,9 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   }
 
   .collection-craft__image {
-    top: -10%;
-    left: -3%;
-
-    width: 135%;
-    height: 125%;
+    inset: 0;
+    width: 100%;
+    height: 100%;
 
     object-position: left center;
   }
@@ -367,7 +355,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   .collection-craft__description {
     max-width: 28rem;
 
-    font-size: 0.62rem;
+    font-size: 0.8125rem;
   }
 }
 </style>

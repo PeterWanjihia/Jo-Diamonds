@@ -60,6 +60,8 @@ describe('PaymentsService', () => {
         mode: 'payment',
         ui_mode: 'embedded_page',
 
+        payment_method_types: ['card', 'bacs_debit'],
+
         adaptive_pricing: {
           enabled: false,
         },
@@ -195,6 +197,35 @@ describe('PaymentsService', () => {
       expect(result).toEqual({
         status: 'complete',
         paymentStatus: 'paid',
+        amountTotal: 25_050,
+        currency: 'gbp',
+        customerEmail: 'client@example.com',
+        reference: 'Private consultation',
+      });
+    });
+
+    it('preserves the unpaid state while a Bacs Direct Debit is processing', async () => {
+      retrieveCheckoutSession.mockResolvedValue({
+        status: 'complete',
+        payment_status: 'unpaid',
+        amount_total: 25_050,
+        currency: 'gbp',
+
+        customer_details: {
+          email: 'client@example.com',
+        },
+
+        metadata: {
+          reference: 'Private consultation',
+        },
+      } as unknown as Stripe.Checkout.Session);
+
+      const result =
+        await service.retrieveCheckoutSession('cs_test_bacs_processing');
+
+      expect(result).toEqual({
+        status: 'complete',
+        paymentStatus: 'unpaid',
         amountTotal: 25_050,
         currency: 'gbp',
         customerEmail: 'client@example.com',

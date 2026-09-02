@@ -390,7 +390,7 @@
   color: rgb(247 243 236 / 93%);
 
   font-family: var(--font-interface);
-  font-size: 0.675rem;
+  font-size: 0.75rem;
   font-weight: 600;
 
   line-height: 1.15;
@@ -407,7 +407,7 @@
   color: rgb(247 243 236 / 72%);
 
   font-family: var(--font-interface);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 400;
 
   line-height: 1.55;
@@ -514,7 +514,7 @@
   color: rgb(39 35 29 / 72%);
 
   font-family: var(--font-interface);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1.1;
@@ -529,7 +529,7 @@
   color: rgb(39 35 29 / 65%);
 
   font-family: var(--font-interface);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 400;
 
   line-height: 1.5;

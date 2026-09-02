@@ -34,6 +34,16 @@ function persistenceInvariant(message: string): never {
   throw new Error(`Invalid persisted catalogue data: ${message}`);
 }
 
+function mapGbpCurrency(currency: string, subject: string): 'GBP' {
+  if (currency !== 'GBP') {
+    return persistenceInvariant(
+      `${subject} must use GBP; received "${currency}"`,
+    );
+  }
+
+  return 'GBP';
+}
+
 export function mapCatalogueSupply(
   supplyMode: ProductRow['supplyMode'],
   editionSize: ProductRow['editionSize'],
@@ -267,7 +277,10 @@ function mapServicePricing(row: ProductServiceRow): CatalogueServicePricing {
       mode: 'fixed',
       price: {
         minor: row.priceMinor,
-        currency: row.currency,
+        currency: mapGbpCurrency(
+          row.currency,
+          `product service "${row.id}"`,
+        ),
       },
     };
   }
@@ -320,7 +333,7 @@ export function mapCatalogueProduct(row: ProductRow): CatalogueProduct {
 
     price: {
       minor: row.priceMinor,
-      currency: row.currency,
+      currency: mapGbpCurrency(row.currency, `product "${row.id}"`),
     },
 
     supply: mapCatalogueSupply(row.supplyMode, row.editionSize),

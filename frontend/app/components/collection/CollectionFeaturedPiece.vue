@@ -12,12 +12,14 @@ import type {
   CatalogueProductSummaryResponse,
 } from '../../types/catalogue';
 
+import {
+  getCommercialStateLabel,
+} from '../../utils/commercial-state';
+
+import { formatMoney } from '../../utils/format-money';
+
 const props = defineProps<{
   readonly product: CatalogueProductSummaryResponse;
-}>();
-
-const emit = defineEmits<{
-  play: [];
 }>();
 
 const editorial = computed(
@@ -31,30 +33,9 @@ const productUrl = computed(
   () => `/pieces/${props.product.slug}`,
 );
 
-const formattedPrice = computed(() => {
-  const amount =
-    props.product.price.minor / 100;
-
-  const currency =
-    props.product.price.currency.toUpperCase();
-
-  if (currency === 'KES') {
-    const formattedAmount =
-      new Intl.NumberFormat('en-KE', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(amount);
-
-    return `KSh ${formattedAmount}`;
-  }
-
-  return new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
-});
+const formattedPrice = computed(() =>
+  formatMoney(props.product.price),
+);
 
 const availabilityLabel = computed(() => {
   if (
@@ -77,11 +58,9 @@ const availabilityLabel = computed(() => {
     return 'Available to order';
   }
 
-  return props.product.commercialState
-    .replaceAll('_', ' ')
-    .replace(/\b\w/g, (character) =>
-      character.toUpperCase(),
-    );
+  return getCommercialStateLabel(
+    props.product.commercialState,
+  );
 });
 </script>
 
@@ -108,8 +87,13 @@ const availabilityLabel = computed(() => {
         </p>
 
         <div class="collection-featured__specifications">
-          <div class="collection-featured__specification">
+          <div
+            v-for="specification in editorial.specifications"
+            :key="`${specification.primary}-${specification.secondary}`"
+            class="collection-featured__specification"
+          >
             <svg
+              v-if="specification.icon === 'diamond'"
               viewBox="0 0 32 32"
               fill="none"
               aria-hidden="true"
@@ -120,15 +104,28 @@ const availabilityLabel = computed(() => {
               <path d="m10 12 6 15 6-15" />
             </svg>
 
-            <ul>
-              <li>2.10 ct</li>
-              <li>G colour</li>
-              <li>VS1 clarity</li>
-            </ul>
-          </div>
-
-          <div class="collection-featured__specification">
             <svg
+              v-else-if="specification.icon === 'quality'"
+              viewBox="0 0 32 32"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="6"
+              />
+              <circle
+                cx="20"
+                cy="20"
+                r="6"
+              />
+              <path d="m8 16 8-8" />
+              <path d="m16 24 8-8" />
+            </svg>
+
+            <svg
+              v-else
               viewBox="0 0 32 32"
               fill="none"
               aria-hidden="true"
@@ -136,17 +133,15 @@ const availabilityLabel = computed(() => {
               <path
                 d="M12.5 20.5 9 24a4 4 0 0 1-5.7-5.7l4.4-4.4a4 4 0 0 1 5.7 0"
               />
-
               <path
                 d="m19.5 11.5 3.5-3.5a4 4 0 1 1 5.7 5.7l-4.4 4.4a4 4 0 0 1-5.7 0"
               />
-
               <path d="m11 21 10-10" />
             </svg>
 
             <ul>
-              <li>Platinum 950</li>
-              <li>Four-prong setting</li>
+              <li>{{ specification.primary }}</li>
+              <li>{{ specification.secondary }}</li>
             </ul>
           </div>
         </div>
@@ -178,7 +173,7 @@ const availabilityLabel = computed(() => {
           arrow="right"
           class="collection-featured__link"
         >
-          View the Aurelia
+          View {{ editorial.displayName }}
         </BaseTextLink>
       </article>
 
@@ -201,20 +196,6 @@ const availabilityLabel = computed(() => {
           class="collection-featured__media-wash"
           aria-hidden="true"
         />
-
-        <button
-          class="collection-featured__play"
-          type="button"
-          :aria-label="`Play a presentation of ${editorial.displayName}`"
-          @click="emit('play')"
-        >
-          <svg
-            viewBox="0 0 32 32"
-            aria-hidden="true"
-          >
-            <path d="m12 8 12 8-12 8z" />
-          </svg>
-        </button>
       </div>
     </div>
   </section>
@@ -280,7 +261,7 @@ const availabilityLabel = computed(() => {
   color: #a47b3f;
 
   font-family: var(--font-interface);
-  font-size: 0.52rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1;
@@ -307,6 +288,7 @@ const availabilityLabel = computed(() => {
   letter-spacing: 0.025em;
 
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .collection-featured__subtitle {
@@ -373,7 +355,7 @@ const availabilityLabel = computed(() => {
     rgb(25 23 19 / 75%);
 
   font-family: var(--font-interface);
-  font-size: 0.54rem;
+  font-size: 0.6875rem;
   font-weight: 400;
 
   line-height: 1.4;
@@ -421,7 +403,7 @@ li:not(:last-child)::after {
     rgb(25 23 19 / 65%);
 
   font-family: var(--font-interface);
-  font-size: 0.52rem;
+  font-size: 0.6875rem;
   font-weight: 400;
 
   line-height: 1.2;
@@ -449,13 +431,13 @@ li:not(:last-child)::after {
 
 .collection-featured__link {
   width: fit-content;
-  min-height: 2rem;
+  min-height: 2.75rem;
 
   margin-top: 0.75rem;
 
   border-bottom: 0;
 
-  font-size: 0.55rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   letter-spacing: 0.075em;
@@ -517,66 +499,6 @@ li:not(:last-child)::after {
   transform: scale(1.018);
 }
 
-.collection-featured__play {
-  position: absolute;
-  right: clamp(1.25rem, 2.5vw, 2.25rem);
-  bottom: clamp(1.25rem, 2.5vw, 2.25rem);
-
-  display: grid;
-
-  width: 3.75rem;
-  height: 3.75rem;
-
-  place-items: center;
-
-  padding: 0;
-
-  border:
-    1px solid
-    rgb(25 23 19 / 52%);
-
-  border-radius: 50%;
-
-  background:
-    rgb(250 248 244 / 48%);
-
-  color: #11110f;
-
-  cursor: pointer;
-
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-
-  transition:
-    background-color 180ms ease,
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.collection-featured__play svg {
-  width: 1.65rem;
-  height: 1.65rem;
-
-  fill: currentColor;
-
-  transform: translateX(0.1rem);
-}
-
-.collection-featured__play:hover {
-  background: #11110f;
-  color: #f8f5ef;
-
-  transform: scale(1.04);
-}
-
-.collection-featured__play:focus-visible {
-  outline:
-    2px solid
-    #a47b3f;
-
-  outline-offset: 3px;
-}
-
 /* Tablet */
 
 @media (max-width: 900px) {
@@ -596,10 +518,6 @@ li:not(:last-child)::after {
     font-size: 1.8rem;
   }
 
-  .collection-featured__play {
-    width: 3.25rem;
-    height: 3.25rem;
-  }
 }
 
 /* Mobile */
@@ -634,12 +552,5 @@ li:not(:last-child)::after {
     min-height: 20rem;
   }
 
-  .collection-featured__play {
-    right: 1rem;
-    bottom: 1rem;
-
-    width: 3.25rem;
-    height: 3.25rem;
-  }
 }
 </style>

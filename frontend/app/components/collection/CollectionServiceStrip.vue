@@ -283,7 +283,7 @@
   margin: 0;
 
   font-family: var(--font-interface);
-  font-size: 0.5rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1.25;
@@ -302,7 +302,7 @@
     rgb(25 23 19 / 68%);
 
   font-family: var(--font-interface);
-  font-size: 0.47rem;
+  font-size: 0.6875rem;
   font-weight: 400;
 
   line-height: 1.55;
@@ -423,11 +423,11 @@
   }
 
   .collection-service__title {
-    font-size: 0.55rem;
+    font-size: 0.75rem;
   }
 
   .collection-service__description {
-    font-size: 0.52rem;
+    font-size: 0.75rem;
   }
 
   .collection-service__description br {

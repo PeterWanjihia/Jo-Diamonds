@@ -25,7 +25,7 @@ export const orders = pgTable(
 
     status: orderStatusEnum('status').notNull().default('pending_payment'),
 
-    currency: text('currency').notNull().default('KES'),
+    currency: text('currency').notNull().default('GBP'),
     subtotalMinor: pgBigint('subtotal_minor', { mode: 'number' }).notNull(),
     totalMinor: pgBigint('total_minor', { mode: 'number' }).notNull(),
 
@@ -55,6 +55,8 @@ export const orders = pgTable(
     index('orders_status_idx').on(table.status),
     index('orders_customer_email_idx').on(table.customerEmail),
     index('orders_created_at_idx').on(table.createdAt),
+
+    check('orders_currency_gbp_check', sql`${table.currency} = 'GBP'`),
 
     check(
       'orders_subtotal_minor_non_negative_check',

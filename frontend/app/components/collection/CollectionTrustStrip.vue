@@ -283,7 +283,7 @@
   color: #171612;
 
   font-family: var(--font-interface);
-  font-size: 0.56rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1.2;
@@ -302,7 +302,7 @@
     rgb(23 22 18 / 72%);
 
   font-family: var(--font-interface);
-  font-size: 0.5rem;
+  font-size: 0.6875rem;
   font-weight: 400;
 
   line-height: 1.55;
@@ -327,11 +327,11 @@
   }
 
   .collection-trust__title {
-    font-size: 0.52rem;
+    font-size: 0.625rem;
   }
 
   .collection-trust__description {
-    font-size: 0.47rem;
+    font-size: 0.625rem;
   }
 }
 
@@ -437,11 +437,11 @@
   }
 
   .collection-trust__title {
-    font-size: 0.58rem;
+    font-size: 0.75rem;
   }
 
   .collection-trust__description {
-    font-size: 0.52rem;
+    font-size: 0.75rem;
   }
 
   .collection-trust__description br {

@@ -28,8 +28,8 @@ function createProductRow(overrides: Partial<ProductRow> = {}): ProductRow {
     category: 'rings',
     collectionId: null,
 
-    priceMinor: 45_000_000,
-    currency: 'KES',
+    priceMinor: 1_480_000,
+    currency: 'GBP',
 
     supplyMode: 'unique',
     editionSize: 1,
@@ -128,7 +128,7 @@ function createProductServiceRow(
     isIncluded: true,
     priceOnRequest: false,
     priceMinor: null,
-    currency: 'KES',
+    currency: 'GBP',
 
     leadTimeDays: 0,
 
@@ -294,18 +294,31 @@ describe('catalogue persistence mappers', () => {
         createProductServiceRow({
           isIncluded: false,
           priceOnRequest: false,
-          priceMinor: 150_000,
-          currency: 'KES',
+          priceMinor: 15_000,
+          currency: 'GBP',
         }),
       );
 
       expect(result.pricing).toEqual({
         mode: 'fixed',
         price: {
-          minor: 150_000,
-          currency: 'KES',
+          minor: 15_000,
+          currency: 'GBP',
         },
       });
+    });
+
+    it('rejects a fixed-price service that does not use GBP', () => {
+      expect(() =>
+        mapCatalogueService(
+          createProductServiceRow({
+            isIncluded: false,
+            priceOnRequest: false,
+            priceMinor: 15_000,
+            currency: 'INVALID',
+          }),
+        ),
+      ).toThrow('Invalid persisted catalogue data: product service');
     });
 
     it('maps a price-on-request service', () => {
@@ -368,8 +381,8 @@ describe('catalogue persistence mappers', () => {
         sku: 'JD-RNG-SOL-001',
 
         price: {
-          minor: 45_000_000,
-          currency: 'KES',
+          minor: 1_480_000,
+          currency: 'GBP',
         },
 
         supply: {
@@ -392,6 +405,12 @@ describe('catalogue persistence mappers', () => {
       expect(() => mapCatalogueProduct(row)).toThrow(
         'Invalid persisted catalogue data: unique product must have edition size 1',
       );
+    });
+
+    it('rejects a product row that does not use GBP', () => {
+      expect(() =>
+        mapCatalogueProduct(createProductRow({ currency: 'INVALID' })),
+      ).toThrow('Invalid persisted catalogue data: product');
     });
   });
 

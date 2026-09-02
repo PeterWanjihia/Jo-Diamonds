@@ -271,6 +271,7 @@ const paymentsEnabled = computed(
   letter-spacing: 0.005em;
 
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .showroom-hero__title span {
@@ -335,10 +336,10 @@ const paymentsEnabled = computed(
   color: rgb(248 245 239 / 74%);
 
   font-family: var(--font-interface);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 500;
 
-  line-height: 1;
+  line-height: 1.35;
   letter-spacing: 0.055em;
 
   text-transform: uppercase;
@@ -398,7 +399,7 @@ const paymentsEnabled = computed(
 
 @media (max-width: 700px) {
   .showroom-hero {
-    min-height: 42rem;
+    min-height: clamp(42rem, 120svh, 48rem);
   }
 
   .showroom-hero__image {
@@ -426,7 +427,7 @@ const paymentsEnabled = computed(
     align-items: flex-end;
 
     padding-block:
-      4.5rem
+      clamp(5rem, 20vw, 7rem)
       3rem;
   }
 
@@ -477,6 +478,16 @@ const paymentsEnabled = computed(
       100%,
       22rem
     );
+  }
+}
+
+@media (max-width: 360px) {
+  .showroom-hero__inner {
+    width: calc(100% - 1.5rem);
+  }
+
+  .showroom-hero__title {
+    font-size: 2.7rem;
   }
 }
 

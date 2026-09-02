@@ -32,8 +32,8 @@ function createProductSummary(
     },
 
     price: {
-      minor: 45_000_000,
-      currency: 'KES',
+      minor: 1_480_000,
+      currency: 'GBP',
     },
 
     supply: {
@@ -79,8 +79,8 @@ function createProductAggregate(): CatalogueProductAggregate {
       collectionId: '30000000-0000-4000-8000-000000000001',
 
       price: {
-        minor: 45_000_000,
-        currency: 'KES',
+        minor: 1_480_000,
+        currency: 'GBP',
       },
 
       supply: {
@@ -246,8 +246,8 @@ function createProductAggregate(): CatalogueProductAggregate {
         pricing: {
           mode: 'fixed',
           price: {
-            minor: 150_000,
-            currency: 'KES',
+            minor: 15_000,
+            currency: 'GBP',
           },
         },
 
@@ -287,8 +287,8 @@ describe('catalogue API response mappers', () => {
         },
 
         price: {
-          minor: 45_000_000,
-          currency: 'KES',
+          minor: 1_480_000,
+          currency: 'GBP',
         },
 
         supply: {
@@ -362,8 +362,8 @@ describe('catalogue API response mappers', () => {
         sku: 'JD-RNG-SOL-001',
 
         price: {
-          minor: 45_000_000,
-          currency: 'KES',
+          minor: 1_480_000,
+          currency: 'GBP',
         },
 
         supply: {
@@ -411,8 +411,8 @@ describe('catalogue API response mappers', () => {
       expect(response.services[1]?.pricing).toEqual({
         mode: 'fixed',
         price: {
-          minor: 150_000,
-          currency: 'KES',
+          minor: 15_000,
+          currency: 'GBP',
         },
       });
     });

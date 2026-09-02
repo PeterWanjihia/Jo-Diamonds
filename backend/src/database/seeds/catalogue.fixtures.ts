@@ -34,8 +34,8 @@ export const catalogueFixtures = [
       category: 'rings',
       collectionId: null,
 
-      priceMinor: 45_000_000,
-      currency: 'KES',
+      priceMinor: 1_480_000,
+      currency: 'GBP',
 
       supplyMode: 'unique',
       editionSize: 1,
@@ -78,8 +78,8 @@ export const catalogueFixtures = [
       category: 'earrings',
       collectionId: null,
 
-      priceMinor: 28_500_000,
-      currency: 'KES',
+      priceMinor: 850_000,
+      currency: 'GBP',
 
       supplyMode: 'reproducible',
       editionSize: null,
@@ -122,8 +122,8 @@ export const catalogueFixtures = [
       category: 'necklaces',
       collectionId: null,
 
-      priceMinor: 52_000_000,
-      currency: 'KES',
+      priceMinor: 1_700_000,
+      currency: 'GBP',
 
       supplyMode: 'unique',
       editionSize: 1,
@@ -166,8 +166,8 @@ export const catalogueFixtures = [
       category: 'bracelets',
       collectionId: null,
 
-      priceMinor: 68_000_000,
-      currency: 'KES',
+      priceMinor: 2_200_000,
+      currency: 'GBP',
 
       supplyMode: 'limited',
       editionSize: 25,
@@ -209,8 +209,8 @@ export const catalogueFixtures = [
       category: 'rings',
       collectionId: null,
 
-      priceMinor: 57_500_000,
-      currency: 'KES',
+      priceMinor: 1_900_000,
+      currency: 'GBP',
 
       supplyMode: 'unique',
       editionSize: 1,

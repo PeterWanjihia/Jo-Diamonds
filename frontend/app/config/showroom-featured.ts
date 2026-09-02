@@ -17,16 +17,6 @@ export interface ShowroomFeaturedEditorial {
   readonly alt: string;
   readonly objectPosition: string;
 
-  /*
-   * Temporary homepage editorial price.
-   *
-   * Product pricing should ultimately come from the
-   * catalogue API after the backend catalogue is migrated
-   * from KES to GBP.
-   */
-  readonly priceMinor: number;
-  readonly currency: 'GBP';
-
   readonly specifications:
     readonly FeaturedSpecification[];
 }
@@ -44,9 +34,6 @@ Readonly<Record<string, ShowroomFeaturedEditorial>> = {
       'Emerald-cut diamond ring displayed on a pale textured surface.',
 
     objectPosition: 'center center',
-
-    priceMinor: 1_480_000,
-    currency: 'GBP',
 
     specifications: [
       {
@@ -80,9 +67,6 @@ ShowroomFeaturedEditorial = {
     'Featured JO.DIAMONDS piece displayed on a pale textured surface.',
 
   objectPosition: 'center center',
-
-  priceMinor: 1_480_000,
-  currency: 'GBP',
 
   specifications: [
     {

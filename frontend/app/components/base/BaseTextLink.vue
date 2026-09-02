@@ -161,6 +161,8 @@ function handleClick(
 
   display: inline-flex;
   width: fit-content;
+  max-width: 100%;
+  min-width: 0;
 
   align-items: center;
   justify-content: flex-start;
@@ -223,7 +225,9 @@ function handleClick(
 
 .base-text-link__label {
   display: inline-flex;
+  min-width: 0;
   align-items: center;
+  overflow-wrap: anywhere;
 }
 
 .base-text-link__arrow {

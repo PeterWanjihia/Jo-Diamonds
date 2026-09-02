@@ -126,6 +126,7 @@ describe('Payments API e2e', () => {
       expect.objectContaining({
         mode: 'payment',
         ui_mode: 'embedded_page',
+        payment_method_types: ['card', 'bacs_debit'],
         metadata: {
           source: 'jodiamonds-private-payment',
           reference: 'Private consultation',

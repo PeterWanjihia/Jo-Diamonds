@@ -186,6 +186,7 @@ function handleClick(
 .base-button {
   display: inline-flex;
 
+  min-width: 0;
   min-height: 2.875rem;
 
   align-items: center;
@@ -214,6 +215,7 @@ function handleClick(
 
   text-align: center;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 
   cursor: pointer;
 
@@ -245,7 +247,7 @@ function handleClick(
  */
 
 .base-button--compact {
-  min-height: 2.5rem;
+  min-height: 2.75rem;
 
   padding:
     0.75rem
@@ -391,8 +393,10 @@ function handleClick(
 
 .base-button__label {
   display: inline-flex;
+  min-width: 0;
   align-items: center;
   justify-content: center;
+  white-space: normal;
 }
 
 .base-button__icon {

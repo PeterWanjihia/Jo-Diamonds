@@ -141,7 +141,7 @@ const cards = computed<
   margin: 0;
 
   font-family: var(--font-interface);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
 
   line-height: 1;
@@ -151,11 +151,11 @@ const cards = computed<
 }
 
 .collection-showcase__all-link {
-  min-height: 2rem;
+  min-height: 2.75rem;
 
   border-bottom: 0;
 
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.08em;
 }
 
@@ -211,10 +211,12 @@ const cards = computed<
 
   .collection-showcase__header {
     align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .collection-showcase__all-link {
-    display: none;
+    display: inline-flex;
   }
 
   .collection-showcase__grid {

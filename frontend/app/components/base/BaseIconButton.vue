@@ -211,8 +211,8 @@ function handleClick(
  */
 
 .base-icon-button--small {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
 }
 
 .base-icon-button--medium {

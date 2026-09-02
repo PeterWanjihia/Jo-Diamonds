@@ -177,6 +177,7 @@ const cards = computed<
 
 .collection-overview__all-link {
   display: inline-flex;
+  min-height: 2.75rem;
 
   align-items: center;
 
@@ -185,7 +186,7 @@ const cards = computed<
   color: #181713;
 
   font-family: var(--font-interface);
-  font-size: 0.55rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1;
@@ -262,12 +263,14 @@ const cards = computed<
 
   .collection-overview__header {
     align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
 
     margin-bottom: 1.25rem;
   }
 
   .collection-overview__all-link {
-    display: none;
+    display: inline-flex;
   }
 
   .collection-overview__grid {

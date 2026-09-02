@@ -29,8 +29,8 @@ function createProduct(
     collectionId: null,
 
     price: {
-      minor: 45_000_000,
-      currency: 'KES',
+      minor: 1_480_000,
+      currency: 'GBP',
     },
 
     supply: {

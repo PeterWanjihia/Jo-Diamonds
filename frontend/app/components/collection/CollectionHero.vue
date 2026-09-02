@@ -78,7 +78,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   position: relative;
 
   width: 100%;
-  height: clamp(
+  min-height: clamp(
     25rem,
     31vw,
     31rem
@@ -170,7 +170,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
     var(--container-wide)
   );
 
-  height: 100%;
+  min-height: inherit;
 
   align-items: center;
 
@@ -210,6 +210,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
   letter-spacing: 0.012em;
 
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .collection-hero__title > span {
@@ -245,11 +246,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
     rgb(21 20 16 / 78%);
 
   font-family: var(--font-interface);
-  font-size: clamp(
-    0.72rem,
-    0.82vw,
-    0.82rem
-  );
+  font-size: clamp(0.8125rem, 0.9vw, 0.9rem);
   font-weight: 400;
 
   line-height: 1.65;
@@ -327,7 +324,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
 
 @media (max-width: 900px) {
   .collection-hero {
-    height: 29rem;
+    min-height: 29rem;
   }
 
   .collection-hero__media {
@@ -374,7 +371,7 @@ import BaseTextLink from '../base/BaseTextLink.vue';
 
 @media (max-width: 620px) {
   .collection-hero {
-    height: 40rem;
+    min-height: 40rem;
 
     background: #f8f5ef;
   }
@@ -449,6 +446,16 @@ import BaseTextLink from '../base/BaseTextLink.vue';
     padding-inline:
       0.2rem
       0.4rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .collection-hero__inner {
+    width: calc(100% - 1.5rem);
+  }
+
+  .collection-hero__title {
+    font-size: 2.65rem;
   }
 }
 </style>

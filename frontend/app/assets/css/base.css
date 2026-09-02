@@ -5,19 +5,38 @@
 }
 
 html {
-  min-width: 320px;
+  min-width: 0;
+  max-width: 100%;
   background: var(--colour-paper);
   color: var(--colour-text);
   font-family: var(--font-interface);
   line-height: var(--line-height-body);
+  scroll-padding-top: 5rem;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
 body {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 100vh;
   margin: 0;
   background: var(--colour-paper);
+  overflow-wrap: anywhere;
+}
+
+#__nuxt,
+.site-shell,
+main,
+section,
+article,
+header,
+footer,
+nav,
+form,
+fieldset {
+  min-width: 0;
 }
 
 body,
@@ -40,6 +59,7 @@ button,
 input,
 select,
 textarea {
+  max-width: 100%;
   color: inherit;
 }
 
@@ -69,6 +89,7 @@ blockquote,
 dl,
 dd {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 ul,
@@ -99,6 +120,12 @@ ol {
 
 .page-container--wide {
   max-width: var(--container-wide);
+}
+
+@media (max-width: 480px) {
+  :root {
+    --page-gutter: 1rem;
+  }
 }
 
 .visually-hidden {

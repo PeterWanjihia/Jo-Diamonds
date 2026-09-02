@@ -12,6 +12,12 @@ import type {
   CatalogueProductSummaryResponse,
 } from '../../types/catalogue';
 
+import {
+  getCommercialStateLabel,
+} from '../../utils/commercial-state';
+
+import { formatMoney } from '../../utils/format-money';
+
 const props = defineProps<{
   readonly product: CatalogueProductSummaryResponse;
 }>();
@@ -24,14 +30,7 @@ const editorial = computed(
 );
 
 const formattedPrice = computed(() =>
-  new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency: editorial.value.currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(
-    editorial.value.priceMinor / 100,
-  ),
+  formatMoney(props.product.price),
 );
 
 const productUrl = computed(
@@ -52,11 +51,9 @@ const availabilityLabel = computed(() => {
     return 'One piece available';
   }
 
-  return props.product.commercialState
-    .replaceAll('_', ' ')
-    .replace(/\b\w/g, (character) =>
-      character.toUpperCase(),
-    );
+  return getCommercialStateLabel(
+    props.product.commercialState,
+  );
 });
 </script>
 
@@ -353,11 +350,7 @@ const availabilityLabel = computed(() => {
    * The reference is a restrained horizontal card,
    * not a near-square product section.
    */
-  height: clamp(
-    19.5rem,
-    24vw,
-    21rem
-  );
+  min-height: clamp(21rem, 26vw, 24rem);
 
   overflow: hidden;
 
@@ -422,8 +415,8 @@ const availabilityLabel = computed(() => {
 
   display: grid;
 
-  width: 2.3rem;
-  height: 2.3rem;
+  width: 2.75rem;
+  height: 2.75rem;
 
   place-items: center;
 
@@ -491,6 +484,7 @@ const availabilityLabel = computed(() => {
   letter-spacing: 0.025em;
 
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .featured-masterpiece__subtitle {
@@ -523,11 +517,12 @@ const availabilityLabel = computed(() => {
   min-width: 0;
 
   align-items: center;
+  flex-wrap: wrap;
 
   color: rgb(25 23 19 / 68%);
 
   font-family: var(--font-interface);
-  font-size: 0.61rem;
+  font-size: 0.6875rem;
 
   line-height: 1.2;
 }
@@ -559,12 +554,10 @@ const availabilityLabel = computed(() => {
 .featured-masterpiece__specification-secondary {
   min-width: 0;
 
-  overflow: hidden;
-
   color: rgb(25 23 19 / 68%);
 
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 /* Price */
@@ -607,7 +600,7 @@ const availabilityLabel = computed(() => {
 .featured-masterpiece__actions
 :deep(.base-button) {
   width: 100%;
-  min-height: 2.45rem;
+  min-height: 2.75rem;
 
   padding-inline: 0.65rem;
 
@@ -627,7 +620,7 @@ const availabilityLabel = computed(() => {
 .featured-masterpiece__assurances {
   display: grid;
   grid-template-columns:
-    repeat(4, max-content);
+    repeat(4, minmax(0, 1fr));
 
   align-items: center;
   justify-content: space-between;
@@ -651,10 +644,10 @@ const availabilityLabel = computed(() => {
   color: rgb(25 23 19 / 61%);
 
   font-family: var(--font-interface);
-  font-size: 0.47rem;
+  font-size: 0.625rem;
 
-  line-height: 1.15;
-  white-space: nowrap;
+  line-height: 1.35;
+  white-space: normal;
 }
 
 .featured-masterpiece__assurances svg {
@@ -684,7 +677,7 @@ const availabilityLabel = computed(() => {
 
   .featured-masterpiece__assurances {
     grid-template-columns:
-      repeat(2, max-content);
+      repeat(2, minmax(0, 1fr));
 
     justify-content: start;
 
@@ -722,7 +715,7 @@ const availabilityLabel = computed(() => {
 
   .featured-masterpiece__assurances {
     grid-template-columns:
-      repeat(4, max-content);
+      repeat(4, minmax(0, 1fr));
 
     justify-content: space-between;
   }

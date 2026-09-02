@@ -234,7 +234,7 @@ const appointmentEmailUrl =
   color: #c59a52;
 
   font-family: var(--font-interface);
-  font-size: 0.55rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1;
@@ -261,6 +261,7 @@ const appointmentEmailUrl =
   letter-spacing: 0.015em;
 
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .private-assistance__title span {
@@ -273,7 +274,7 @@ const appointmentEmailUrl =
   color: rgb(247 243 236 / 78%);
 
   font-family: var(--font-interface);
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   font-weight: 400;
 
   line-height: 1.45;
@@ -290,7 +291,7 @@ const appointmentEmailUrl =
 
 .private-assistance__actions
 :deep(.base-button) {
-  min-height: 2.3rem;
+  min-height: 2.75rem;
 
   padding-inline: 1.25rem;
 
@@ -300,7 +301,7 @@ const appointmentEmailUrl =
   background:
     rgb(0 0 0 / 10%);
 
-  font-size: 0.52rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.075em;
 
   backdrop-filter: blur(3px);
@@ -339,6 +340,8 @@ const appointmentEmailUrl =
 
 .private-assistance__contact-link {
   display: inline-flex;
+  min-width: 0;
+  min-height: 2.75rem;
 
   align-items: center;
   gap: 0.65rem;
@@ -346,15 +349,20 @@ const appointmentEmailUrl =
   color: rgb(247 243 236 / 89%);
 
   font-family: var(--font-interface);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 400;
 
   line-height: 1.2;
 
-  white-space: nowrap;
+  white-space: normal;
 
   transition:
     color 180ms ease;
+}
+
+.private-assistance__contact-link span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .private-assistance__contact-link:hover {

@@ -160,7 +160,7 @@ function handleSubmit(): void {
   display: grid;
   grid-template-columns:
     minmax(0, 1fr)
-    minmax(26rem, 0.95fr);
+    minmax(20rem, 0.95fr);
 
   width: min(
     calc(100% - (2 * var(--page-gutter))),
@@ -172,9 +172,9 @@ function handleSubmit(): void {
   align-items: center;
 
   gap: clamp(
-    3rem,
+    1.5rem,
     6vw,
-    7rem
+    5rem
   );
 
   margin-inline: auto;
@@ -239,7 +239,7 @@ function handleSubmit(): void {
   color: rgb(25 23 19 / 76%);
 
   font-family: var(--font-interface);
-  font-size: 0.54rem;
+  font-size: 0.75rem;
   font-weight: 400;
 
   line-height: 1.4;
@@ -276,7 +276,7 @@ function handleSubmit(): void {
 .private-list__input,
 .private-list__submit {
   width: 100%;
-  height: 2.2rem;
+  min-height: 2.75rem;
 
   box-sizing: border-box;
 }
@@ -304,7 +304,7 @@ function handleSubmit(): void {
   color: #191713;
 
   font-family: var(--font-interface);
-  font-size: 0.53rem;
+  font-size: 0.875rem;
   font-weight: 400;
 
   line-height: 1;
@@ -352,7 +352,7 @@ function handleSubmit(): void {
   color: #f7f3ec;
 
   font-family: var(--font-interface);
-  font-size: 0.51rem;
+  font-size: 0.6875rem;
   font-weight: 600;
 
   line-height: 1;
@@ -399,7 +399,8 @@ function handleSubmit(): void {
   color: rgb(25 23 19 / 52%);
 
   font-family: var(--font-interface);
-  font-size: 0.45rem;
+  min-height: 2.75rem;
+  font-size: 0.75rem;
   font-weight: 400;
 
   line-height: 1.2;
@@ -421,8 +422,8 @@ function handleSubmit(): void {
 .private-list__checkbox {
   display: grid;
 
-  width: 0.65rem;
-  height: 0.65rem;
+  width: 1.125rem;
+  height: 1.125rem;
 
   flex: 0 0 auto;
 
@@ -437,8 +438,8 @@ function handleSubmit(): void {
 }
 
 .private-list__checkbox svg {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.8rem;
+  height: 0.8rem;
 
   opacity: 0;
 
@@ -471,7 +472,8 @@ input:focus-visible
   color: rgb(25 23 19 / 59%);
 
   font-family: var(--font-interface);
-  font-size: 0.44rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
 /* Tablet */
@@ -550,7 +552,11 @@ input:focus-visible
 
   .private-list__input,
   .private-list__submit {
-    height: 2.65rem;
+    min-height: 2.75rem;
+  }
+
+  .private-list__input {
+    font-size: 1rem;
   }
 
   .private-list__submit {
@@ -562,7 +568,7 @@ input:focus-visible
 
     margin-top: 0.6rem;
 
-    font-size: 0.5rem;
+    font-size: 0.75rem;
   }
 
   .private-list__status {

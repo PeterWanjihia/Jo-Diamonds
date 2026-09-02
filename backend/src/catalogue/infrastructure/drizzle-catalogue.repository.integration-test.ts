@@ -146,8 +146,8 @@ describe('DrizzleCatalogueRepository integration', () => {
       sku: 'JD-RNG-SOL-001',
 
       price: {
-        minor: 45_000_000,
-        currency: 'KES',
+        minor: 1_480_000,
+        currency: 'GBP',
       },
 
       supply: {
@@ -229,8 +229,8 @@ describe('DrizzleCatalogueRepository integration', () => {
     expect(aggregate.services[2]?.pricing).toEqual({
       mode: 'fixed',
       price: {
-        minor: 150_000,
-        currency: 'KES',
+        minor: 15_000,
+        currency: 'GBP',
       },
     });
   });

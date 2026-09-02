@@ -253,7 +253,7 @@ function createSmokeProduct(productId: string): SeedProductInsert {
     category: 'smoke-test',
 
     priceMinor: 100,
-    currency: 'KES',
+    currency: 'GBP',
 
     supplyMode: 'unique',
     editionSize: 1,
@@ -570,7 +570,7 @@ describe('database smoke tests', () => {
           isIncluded: true,
           priceOnRequest: false,
           priceMinor: null,
-          currency: 'KES',
+          currency: 'GBP',
           displayOrder: 0,
         });
 

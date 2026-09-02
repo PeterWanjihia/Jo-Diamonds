@@ -41,7 +41,7 @@ export const products = pgTable(
     }),
 
     priceMinor: pgBigint('price_minor', { mode: 'number' }).notNull(),
-    currency: text('currency').notNull().default('KES'),
+    currency: text('currency').notNull().default('GBP'),
 
     supplyMode: supplyModeEnum('supply_mode').notNull(),
     editionSize: integer('edition_size'),
@@ -84,6 +84,8 @@ export const products = pgTable(
     ),
 
     check('products_price_minor_positive_check', sql`${table.priceMinor} > 0`),
+
+    check('products_currency_gbp_check', sql`${table.currency} = 'GBP'`),
 
     check(
       'products_supply_mode_edition_size_check',

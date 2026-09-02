@@ -52,8 +52,8 @@ function createProductSummary(
     },
 
     price: {
-      minor: 45_000_000,
-      currency: 'KES',
+      minor: 1_480_000,
+      currency: 'GBP',
     },
 
     supply: {
@@ -114,8 +114,8 @@ function createProductAggregate(): CatalogueProductAggregate {
       collectionId: '30000000-0000-4000-8000-000000000001',
 
       price: {
-        minor: 45_000_000,
-        currency: 'KES',
+        minor: 1_480_000,
+        currency: 'GBP',
       },
 
       supply: {
@@ -184,8 +184,8 @@ describe('CatalogueController', () => {
             },
 
             price: {
-              minor: 45_000_000,
-              currency: 'KES',
+              minor: 1_480_000,
+              currency: 'GBP',
             },
 
             supply: {
@@ -233,8 +233,8 @@ describe('CatalogueController', () => {
         sku: 'JD-RNG-SOL-001',
 
         price: {
-          minor: 45_000_000,
-          currency: 'KES',
+          minor: 1_480_000,
+          currency: 'GBP',
         },
 
         commercialState: 'available',

@@ -14,6 +14,7 @@ import { parseGbpAmountToPence } from './money/parse-gbp-amount-to-pence';
 import { STRIPE_CLIENT, type StripeClient } from './stripe.provider';
 
 const PAYMENT_CURRENCY = 'gbp';
+const PAYMENT_METHOD_TYPES = ['card', 'bacs_debit'] as const;
 
 const CHECKOUT_SESSION_ID_PATTERN = /^cs_[A-Za-z0-9_]+$/;
 
@@ -60,6 +61,11 @@ export class PaymentsService {
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         ui_mode: 'embedded_page',
+
+        // Keep the payment methods explicit so that this private-payment
+        // flow always offers cards and UK Bacs Direct Debit when the
+        // Stripe account is eligible and Bacs is enabled.
+        payment_method_types: [...PAYMENT_METHOD_TYPES],
 
         adaptive_pricing: {
           enabled: false,

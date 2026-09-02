@@ -47,6 +47,11 @@ export const orderItems = pgTable(
     index('order_items_product_id_idx').on(table.productId),
 
     check(
+      'order_items_currency_snapshot_gbp_check',
+      sql`${table.currencySnapshot} = 'GBP'`,
+    ),
+
+    check(
       'order_items_unit_price_minor_positive_check',
       sql`${table.unitPriceMinorSnapshot} > 0`,
     ),

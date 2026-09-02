@@ -91,7 +91,9 @@ watch(
 
 .product-image__fallback {
   display: grid;
-  min-height: 30rem;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
 
   place-content: center;
   gap: var(--space-3);
