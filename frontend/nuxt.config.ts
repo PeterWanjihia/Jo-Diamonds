@@ -12,27 +12,37 @@ export default defineNuxtConfig({
     '~/assets/css/base.css',
   ],
 
-  runtimeConfig: {
-    public: {
-      appEnvironment: isProduction
-        ? 'production'
-        : 'development',
+runtimeConfig: {
+  public: {
+    appEnvironment: isProduction
+      ? 'production'
+      : 'development',
 
-      apiBaseUrl:
-        'http://127.0.0.1:4000/v1',
+    apiBaseUrl:
+      process.env.NUXT_PUBLIC_API_BASE_URL ??
+      (
+        isProduction
+          ? 'https://jdiamonds-api.onrender.com/v1'
+          : 'http://127.0.0.1:4000/v1'
+      ),
 
-      siteUrl:
-        'http://localhost:3000',
+    siteUrl:
+      process.env.NUXT_PUBLIC_SITE_URL ??
+      (
+        isProduction
+          ? 'https://jodiamonds.store'
+          : 'http://localhost:3000'
+      ),
 
-      paymentsEnabled:
-        process.env.NUXT_PUBLIC_PAYMENTS_ENABLED ===
-        'true',
+    paymentsEnabled:
+      process.env.NUXT_PUBLIC_PAYMENTS_ENABLED ===
+      'true',
 
-      stripePublishableKey:
-        process.env
-          .NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '',
-    },
+    stripePublishableKey:
+      process.env
+        .NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '',
   },
+},
 
   app: {
     head: {
