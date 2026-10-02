@@ -1,7 +1,7 @@
 const isProduction = process.env.NODE_ENV === 'production';
 
 const productionApiBaseUrl =
-  'https://jdiamonds-api.onrender.com/v1';
+  'https://jo-diamonds.onrender.com/v1';
 
 const developmentApiBaseUrl =
   'http://127.0.0.1:4000/v1';
@@ -56,12 +56,6 @@ export default defineNuxtConfig({
     },
   },
 
-  /*
-   * GitHub Pages serves static files.
-   *
-   * Dynamic Nuxt routes such as /pieces/[slug] therefore
-   * need to exist as generated HTML at deployment time.
-   */
   nitro: {
     prerender: {
       crawlLinks: true,
